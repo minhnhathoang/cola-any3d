@@ -12,6 +12,13 @@
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/eden-architect/eden-tests/eden-deployment-tests/eden-deployment-test-glassfish" />
+    <file type="web" url="file://$PROJECT_DIR$/eden-architect/eden-tests/eden-deployment-tests/eden-deployment-test-tomcat" />
+    <file type="web" url="file://$PROJECT_DIR$/eden-architect/eden-tests/eden-deployment-tests/eden-deployment-test-tomee" />
+    <file type="web" url="file://$PROJECT_DIR$/eden-architect/eden-tests/eden-deployment-tests/eden-deployment-test-wildfly" />
+    <file type="web" url="file://$PROJECT_DIR$/eden-architect/eden-tests/eden-deployment-tests/eden-deployment-test-wlp" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -19,7 +26,14 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/eden-architect/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/components/message-queue/pom.xml" />
+        <option value="$PROJECT_DIR$/components/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">

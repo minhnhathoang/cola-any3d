@@ -18,11 +18,12 @@
 
         <spring-ctx.version>5.3.15</spring-ctx.version>
         <cola.components.version>4.3.2</cola.components.version>
-        <spring-boot.version>2.7.2</spring-boot.version>
+        <spring-boot.version>2.7.5</spring-boot.version>
         <mybatis-plus.version>3.5.3</mybatis-plus.version>
     </properties>
 
     <modules>
+        <module>eden-architect</module>
         <module>any3d-client</module>
         <module>any3d-adapter</module>
         <module>any3d-app</module>
