@@ -18,11 +18,13 @@
 
         <spring-ctx.version>5.3.15</spring-ctx.version>
         <cola.components.version>4.3.2</cola.components.version>
-        <spring-boot.version>2.7.2</spring-boot.version>
+        <spring-boot.version>2.7.5</spring-boot.version>
         <mybatis-plus.version>3.5.3</mybatis-plus.version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
     </properties>
 
     <modules>
+        <module>eden-architect</module>
         <module>any3d-client</module>
         <module>any3d-adapter</module>
         <module>any3d-app</module>
@@ -101,19 +103,11 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
 
-            <!--Validation API-->
-            <!--
-                - javax.validation:javax.validation
-                - org.hibernate.validator:hibernate-validator
-                - org.glassfish:jakarta.el
-                are declared in spring-boot-dependencies
-            -->
             <dependency>
                 <groupId>javax.el</groupId>
                 <artifactId>javax.el-api</artifactId>
                 <version>3.0.0</version>
             </dependency>
-            <!--Validation API End -->
 
             <!-- Misc -->
             <dependency>

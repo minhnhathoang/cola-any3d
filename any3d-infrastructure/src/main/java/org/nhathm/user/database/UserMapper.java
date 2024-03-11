@@ -10,4 +10,5 @@ import org.nhathm.user.dataobject.UserDO;
 @Mapper
 public interface UserMapper extends BaseMapper<UserDO> {
 
+
 }

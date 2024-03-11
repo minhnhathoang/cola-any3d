@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Spring Boot Starter
  */
-@SpringBootApplication(scanBasePackages = {"org.nhathm", "com.alibaba.cola"})
+@SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
