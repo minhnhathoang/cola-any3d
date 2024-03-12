@@ -1,4 +1,4 @@
-package org.nhathm.user.gateway.impl;
+package org.nhathm.user.gateway;
 
 import lombok.RequiredArgsConstructor;
 import org.nhathm.domain.user.entity.User;

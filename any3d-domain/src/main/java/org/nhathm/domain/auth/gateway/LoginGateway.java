@@ -5,4 +5,5 @@ package org.nhathm.domain.auth.gateway;
  */
 public interface LoginGateway {
 
+    boolean login(String username, String password);
 }

@@ -1,4 +1,4 @@
-package org.nhathm.auth.gateway.impl;
+package org.nhathm.auth.gateway;
 
 import org.nhathm.domain.auth.gateway.LoginGateway;
 import org.springframework.stereotype.Component;
