@@ -1,4 +1,4 @@
-package org.nhathm.customer.executor.query;
+package org.nhathm.app.customer.executor.query;
 
 import com.alibaba.cola.dto.MultiResponse;
 import org.nhathm.dto.CustomerListByNameQry;

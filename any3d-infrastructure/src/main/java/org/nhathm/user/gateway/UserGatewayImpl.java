@@ -20,13 +20,6 @@ public class UserGatewayImpl implements UserGateway {
     private final UserConvertor userConvertor;
 
     @Override
-    public User getById(String userId) {
-        UserDO userDO = userMapper.selectById(userId);
-        // TODO: Convert UserDO to User
-        return null;
-    }
-
-    @Override
     public void save(User user) {
         UserDO userDO = userConvertor.toDataObject(user);
         userMapper.insert(userDO);

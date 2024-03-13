@@ -5,11 +5,6 @@ import org.nhathm.domain.user.entity.User;
 public interface UserGateway {
 
     /**
-     * @param userId
-     */
-    User getById(String userId);
-
-    /**
      * Create a new user
      *
      * @param user
@@ -25,5 +20,4 @@ public interface UserGateway {
      * @param user
      */
     void deleteById(User user);
-
 }

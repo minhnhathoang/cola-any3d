@@ -9,5 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginGatewayImpl implements LoginGateway {
 
-
+    @Override
+    public boolean login(String username, String password) {
+        return false;
+    }
 }

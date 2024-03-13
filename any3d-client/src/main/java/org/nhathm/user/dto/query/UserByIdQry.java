@@ -1,9 +1,17 @@
 package org.nhathm.user.dto.query;
 
+import lombok.Builder;
+import lombok.Data;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
-@lombok.Data
+@Data
+@Builder
 public class UserByIdQry {
+
+    @NotNull(message = "userId can't be null")
     private String userId;
 }

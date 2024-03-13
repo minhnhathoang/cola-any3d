@@ -1,4 +1,4 @@
-package org.nhathm.customer;
+package org.nhathm.app.customer;
 
 import com.alibaba.cola.dto.MultiResponse;
 import com.alibaba.cola.dto.Response;
@@ -7,11 +7,10 @@ import org.nhathm.api.CustomerServiceI;
 import org.nhathm.dto.CustomerAddCmd;
 import org.nhathm.dto.CustomerListByNameQry;
 import org.nhathm.dto.data.CustomerDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.nhathm.customer.executor.CustomerAddCmdExe;
-import org.nhathm.customer.executor.query.CustomerListByNameQryExe;
+import org.nhathm.app.customer.executor.CustomerAddCmdExe;
+import org.nhathm.app.customer.executor.query.CustomerListByNameQryExe;
 
 import javax.annotation.Resource;
 

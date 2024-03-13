@@ -1,5 +1,5 @@
 
-package org.nhathm.customer.executor;
+package org.nhathm.app.customer.executor;
 
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.exception.BizException;
