@@ -33,7 +33,7 @@
         <module>any3d-app</module>
         <module>any3d-domain</module>
         <module>any3d-infrastructure</module>
-        <module>start</module>
+        <module>any3d-start</module>
     </modules>
 
     <dependencyManagement>

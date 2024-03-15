@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>start</artifactId>
+    <artifactId>any3d-start</artifactId>
     <packaging>jar</packaging>
     <name>start</name>
 
