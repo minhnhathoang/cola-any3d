@@ -22,8 +22,11 @@ public class UserDO {
     private String id;
 
     @TableField("email")
-    private String name;
+    private String email;
 
     @TableField("password")
     private String password;
+
+    @TableField("full_name")
+    private String fullName;
 }

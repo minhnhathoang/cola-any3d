@@ -5,12 +5,11 @@ import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
-@Configuration
+//@Configuration
 public class MinioConfig {
 
     public static final String COMMON_BUCKET_NAME = "common";

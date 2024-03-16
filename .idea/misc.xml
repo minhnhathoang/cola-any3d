@@ -33,6 +33,7 @@
       <set>
         <option value="$PROJECT_DIR$/components/message-queue/pom.xml" />
         <option value="$PROJECT_DIR$/components/pom.xml" />
+        <option value="$PROJECT_DIR$/eden-architect/pom.xml" />
         <option value="$PROJECT_DIR$/shared-components/pom.xml" />
       </set>
     </option>
