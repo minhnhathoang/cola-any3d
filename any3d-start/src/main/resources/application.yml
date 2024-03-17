@@ -5,9 +5,28 @@ logging:
     org.springframework.security: DEBUG
 #    org.springframework.boot.autoconfigure: DEBUG
 
-jwt:
+ejwt:
   private.key: classpath:app.key
   public.key: classpath:app.pub
+
+spring:
+  security:
+    jwt:
+      enabled: true
+      header: Authorization
+      base64Secret: aG91c2VtZWFsZ3Jld21hc3Nwcml2YXRldGVycmlibGVmb290YmFsbGhhbGZ3YXliZWc=
+      secret: 4322432423
+      tokenValidityInSeconds: 1800
+      tokenValidityInSecondsForRememberMe: 2592000
+      anonymousUrls:
+        - /public/**    # Example anonymous URL pattern
+        - /login        # Another example
+      permitAllUrls:
+        - /permit/all/**   # Example permit all URL pattern
+        - /public/**       # Another example
+      authenticatedUrls:
+        - /secure/**    # Example authenticated URL pattern
+        - /api/**       # Another example
 
 minio:
   url: http://localhost:9000

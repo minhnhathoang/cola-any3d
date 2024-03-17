@@ -1,11 +1,10 @@
-package org.nhathm.user.web;
+package org.nhathm.user;
 
 import com.alibaba.cola.dto.PageResponse;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Delete;
-import org.nhathm.common.APIConstant;
+import org.nhathm.constant.APIConstant;
 import org.nhathm.user.api.UserService;
 import org.nhathm.user.dto.clientobject.UserCO;
 import org.nhathm.user.dto.command.UserAddCmd;
