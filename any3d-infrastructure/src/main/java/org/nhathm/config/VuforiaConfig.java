@@ -21,7 +21,7 @@ public class VuforiaConfig {
     public VuforiaApiClient vuforiaApiClient() throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         VuforiaApiClient client = new VuforiaApiClient(new OkHttpClient());
         System.out.println("VuforiaApiClient created");
-        System.out.println(client.getAllTargets("df15ae87939e346784dc41d1fc939b27bdb31ac7", "1eb77208f29f898dcf58e6b2625d70964afc5e14"));
+//        System.out.println(client.getAllTargets("df15ae87939e346784dc41d1fc939b27bdb31ac7", "1eb77208f29f898dcf58e6b2625d70964afc5e14"));
         return client;
     }
 }

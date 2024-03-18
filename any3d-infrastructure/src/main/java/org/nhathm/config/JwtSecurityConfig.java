@@ -77,6 +77,7 @@ public class JwtSecurityConfig {
                 )
                 .authorizeHttpRequests((authorize) -> authorize
                         .antMatchers("/api/auth/login").permitAll()
+                        .antMatchers("/api/auth/register").permitAll()
                         .antMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

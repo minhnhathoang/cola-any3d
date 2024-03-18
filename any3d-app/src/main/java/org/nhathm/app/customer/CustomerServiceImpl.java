@@ -30,5 +30,4 @@ public class CustomerServiceImpl implements CustomerServiceI {
     public MultiResponse<CustomerDTO> listByName(CustomerListByNameQry customerListByNameQry) {
         return customerListByNameQryExe.execute(customerListByNameQry);
     }
-
 }

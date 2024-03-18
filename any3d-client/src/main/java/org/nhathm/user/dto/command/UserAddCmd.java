@@ -13,9 +13,6 @@ public class UserAddCmd {
     @NotBlank(message = "username can't be blank")
     private String username;
 
-    @NotBlank(message = "email can't be blank")
-    private String email;
-
     @NotBlank(message = "password can't be blank")
     private String password;
 }

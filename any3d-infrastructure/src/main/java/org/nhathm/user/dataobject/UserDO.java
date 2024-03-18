@@ -15,18 +15,18 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode
 @SuperBuilder
 @ToString
-@TableName("m_user")
+@TableName("t_user")
 public class UserDO {
 
     @TableId("id")
     private String id;
 
-    @TableField("email")
-    private String email;
-
     @TableField("password")
     private String password;
 
-    @TableField("full_name")
-    private String fullName;
+    @TableField("username")
+    private String username;
+
+    @TableField("email")
+    private String email;
 }

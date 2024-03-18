@@ -17,11 +17,19 @@
 package org.nhathm.app.auth.executor.query;
 
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.cola.exception.Assert;
+import com.alibaba.cola.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.auth.dto.AuthLoginCO;
 import org.nhathm.auth.dto.query.AuthLoginQry;
+import org.nhathm.domain.auth.domainservice.JwtTokenProvider;
+import org.nhathm.domain.auth.domainservice.JwtTokenService;
+import org.nhathm.domain.user.entity.UserDetails;
 import org.nhathm.domain.user.gateway.UserGateway;
+import org.nhathm.dto.data.ErrorCode;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
+import util.error.ClientAssert;
 
 @RequiredArgsConstructor
 @Component
@@ -29,8 +37,16 @@ public class AuthLoginQryExe {
 
     private final UserGateway userGateway;
 
-    public SingleResponse<AuthLoginCO> execute(AuthLoginQry qry) {
+    private final JwtTokenService jwtTokenService;
 
-        return null;
+    public SingleResponse<AuthLoginCO> execute(AuthLoginQry qry) {
+        UserDetails userDetails = (UserDetails) userGateway.loadUserByUsername(qry.getUsername());
+        ClientAssert.notNull(userDetails, ErrorCode.B_USER_userNotFound.toBizException());
+        jwtTokenService.authenticate(userDetails, null);
+        return SingleResponse.of(AuthLoginCO.builder()
+                .username(userDetails.getUsername())
+                .accessToken(jwtTokenService.authenticate(userDetails, null))
+                .build()
+        );
     }
 }

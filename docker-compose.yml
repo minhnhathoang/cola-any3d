@@ -20,6 +20,19 @@ x-minio-common: &minio-common
 # using nginx reverse proxy, load balancing, you can access
 # it through port 9000.
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: any3d
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./data/db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
   minio1:
     <<: *minio-common
     hostname: minio1

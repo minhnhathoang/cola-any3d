@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class AuthLoginQry {
 
     @NotNull
-    private String email;
+    private String username;
 
     @NotNull
     private String password;

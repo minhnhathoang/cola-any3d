@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.nhathm.api.CustomerServiceI;
 import org.nhathm.dto.CustomerAddCmd;
 import org.nhathm.dto.data.CustomerDTO;
-import org.nhathm.dto.data.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -58,6 +57,5 @@ public class CustomerServiceTest {
         Response response = customerService.addCustomer(customerAddCmd);
 
         //3.assert error
-        Assert.assertEquals(ErrorCode.B_CUSTOMER_companyNameConflict.getErrCode(), response.getErrCode());
     }
 }

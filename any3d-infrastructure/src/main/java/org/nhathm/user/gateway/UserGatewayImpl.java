@@ -6,7 +6,6 @@ import org.nhathm.domain.user.entity.UserDetails;
 import org.nhathm.domain.user.gateway.UserGateway;
 import org.nhathm.user.database.UserConvertor;
 import org.nhathm.user.database.UserMapper;
-import org.nhathm.user.dataobject.UserDO;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -34,14 +33,12 @@ public class UserGatewayImpl implements UserGateway {
 
     @Override
     public void save(User user) {
-        UserDO userDO = userConvertor.toDataObject(user);
-        userMapper.insert(userDO);
+        userMapper.insert(userConvertor.toDataObject(user));
     }
 
     @Override
     public void updateById(User user) {
-        UserDO userDO = userConvertor.toDataObject(user);
-        userMapper.updateById(userDO);
+        userMapper.updateById(userConvertor.toDataObject(user));
     }
 
     @Override
