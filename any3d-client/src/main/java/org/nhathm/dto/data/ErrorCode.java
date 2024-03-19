@@ -3,9 +3,9 @@ package org.nhathm.dto.data;
 import com.alibaba.cola.exception.BizException;
 
 public enum ErrorCode {
-
-    B_USER_userNotFound("USER-404", "User not found"),
-    ;
+    B_AUTH_Unauthorized("AUTH-401", "Unauthorized"),
+    B_USER_UsernameAlreadyExist("USER-409", "Username already exists"),
+    B_USER_UserNotFound("USER-404", "User not found");
 
     private final String errCode;
     private final String errDesc;

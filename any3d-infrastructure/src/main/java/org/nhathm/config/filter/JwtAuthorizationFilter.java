@@ -2,6 +2,7 @@ package org.nhathm.config.filter;
 
 import domain.security.common.AccessToken;
 import domain.security.common.JwtConstants;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.nhathm.domain.auth.domainservice.JwtTokenProvider;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
@@ -39,7 +41,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                     @NotNull FilterChain chain) throws IOException, ServletException {
-        System.out.println("JwtAuthorizationFilter.doFilterInternal");
         if (!isAnonymousUrls(request)) {
             AccessToken accessToken = resolveToken(request);
             if (accessToken == null) {
@@ -69,12 +70,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private boolean isAnonymousUrls(HttpServletRequest request) {
-        return true;
-//        List<String> anonymousUrls = jwtTokenProvider.getJwtConfig().getAnonymousUrls();
-//        if (CollectionUtils.isEmpty(anonymousUrls)) {
-//            return false;
-//        }
-//        String requestURI = request.getRequestURI();
-//        return anonymousUrls.stream().anyMatch(url -> pathMatcher.match(url, requestURI));
+        List<String> anonymousUrls = jwtTokenProvider.getJwtConfig().getAnonymousUrls();
+        if (CollectionUtils.isEmpty(anonymousUrls)) {
+            return false;
+        }
+        String requestURI = request.getRequestURI();
+        return anonymousUrls.stream().anyMatch(url -> pathMatcher.match(url, requestURI));
     }
 }

@@ -2,7 +2,9 @@ package org.nhathm.app.user.executor.query;
 
 import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
-import org.nhathm.user.database.UserMapper;
+import org.nhathm.app.auth.assembler.UserAssembler;
+import org.nhathm.user.database.UserRepository;
+import org.nhathm.user.dataobject.UserDO;
 import org.nhathm.user.dto.clientobject.UserCO;
 import org.nhathm.user.dto.query.UserByIdQry;
 import org.springframework.stereotype.Component;
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserByIdQryExe {
 
-    private final UserMapper userMapper;
+    private final UserRepository userRepository;
+
+    private final UserAssembler userAssembler;
 
     public SingleResponse<UserCO> execute(UserByIdQry qry) {
-        // TODO:
-        return null;
+        UserDO userDO = userRepository.findById(qry.getUserId()).orElse(null);
+        return SingleResponse.of(userAssembler.toCO(userDO));
     }
 }

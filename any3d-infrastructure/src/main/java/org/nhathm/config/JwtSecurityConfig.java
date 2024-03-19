@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nhathm.config.filter.JwtAuthorizationFilter;
 import org.nhathm.domain.auth.domainservice.JwtAuthenticationProvider;
-import org.nhathm.domain.auth.domainservice.LogoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -49,8 +48,6 @@ public class JwtSecurityConfig {
     @Value("${ejwt.private.key}")
     RSAPrivateKey privateKey;
 
-    private final LogoutHandler logoutHandler;
-
     private final JwtAuthenticationProvider customAuthenticationProvider;
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
@@ -72,15 +69,11 @@ public class JwtSecurityConfig {
         http
                 .csrf(CsrfConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .requestMatchers((matchers) -> matchers
+                        .antMatchers("/api/auth/login", "/api/auth/register", "/api/admin/**")
                 )
-                .authorizeHttpRequests((authorize) -> authorize
-                        .antMatchers("/api/auth/login").permitAll()
-                        .antMatchers("/api/auth/register").permitAll()
-                        .antMatchers("/api/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -18,17 +18,14 @@ package org.nhathm.domain.auth.domainservice;
 
 import com.google.common.collect.Maps;
 import domain.security.common.AccessToken;
-import domain.security.common.JwtConstants;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.domain.user.entity.UserDetails;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import util.Strings;
 
 import java.util.Map;
 
@@ -40,7 +37,7 @@ public class JwtTokenService {
 
     private static final String AUTHENTICATE_EXCEPTION = "JWT authenticated failed, caught exception: {}";
 
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authManager;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -48,21 +45,19 @@ public class JwtTokenService {
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-            Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+            Authentication authentication = this.authManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
             if (authentication.getAuthorities() != null) {
                 if (claims == null) {
                     claims = Maps.newHashMap();
                 }
-                StringBuilder authorities = new StringBuilder();
-                for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
-                    authorities.append(grantedAuthority.getAuthority()).append(Strings.COMMA);
-                }
-                authorities.deleteCharAt(authorities.length() - 1);
-                claims.put(JwtConstants.AUTHORITIES_KEY, authorities);
+//                StringBuilder authorities = new StringBuilder();
+//                for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+//                    authorities.append(grantedAuthority.getAuthority()).append(Strings.COMMA);
+//                }
+//                authorities.deleteCharAt(authorities.length() - 1);
+//                claims.put(JwtConstants.AUTHORITIES_KEY, authorities);
             }
-
             return jwtTokenProvider.createToken(authentication, user.isRememberMe(), claims);
         } catch (BadCredentialsException ex) {
             throw new UnauthorizedException(ex.getMessage());

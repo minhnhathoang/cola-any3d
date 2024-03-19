@@ -5,20 +5,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserGateway extends UserDetailsService {
 
-    /**
-     * Create a new user
-     *
-     * @param user
-     */
-    void save(User user);
+    boolean existsByUsername(String username);
 
-    /**
-     * @param user
-     */
-    void updateById(User user);
+    void create(User user);
 
-    /**
-     * @param user
-     */
-    void deleteById(User user);
+    void update(User user);
 }

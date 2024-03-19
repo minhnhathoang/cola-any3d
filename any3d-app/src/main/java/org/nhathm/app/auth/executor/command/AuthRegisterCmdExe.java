@@ -6,8 +6,7 @@ import org.nhathm.app.auth.assembler.UserAssembler;
 import org.nhathm.auth.dto.command.AuthRegisterCmd;
 import org.nhathm.domain.user.entity.User;
 import org.nhathm.domain.user.gateway.UserGateway;
-import org.nhathm.user.database.UserConvertor;
-import org.nhathm.user.dto.command.UserAddCmd;
+import org.nhathm.dto.data.ErrorCode;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,7 +22,10 @@ public class AuthRegisterCmdExe {
 
     public Response execute(AuthRegisterCmd cmd) {
         User user = userAssembler.toEntity(cmd);
-        userGateway.save(user);
+        if (userGateway.existsByUsername(user.getUsername())) {
+            throw ErrorCode.B_USER_UsernameAlreadyExist.toBizException();
+        }
+        userGateway.create(user);
         return Response.buildSuccess();
     }
 }

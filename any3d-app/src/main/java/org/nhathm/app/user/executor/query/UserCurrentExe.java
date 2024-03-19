@@ -1,10 +1,10 @@
 package org.nhathm.app.user.executor.query;
 
-import com.alibaba.cola.dto.PageResponse;
+import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
+import org.nhathm.app.auth.assembler.UserAssembler;
 import org.nhathm.user.database.UserRepository;
 import org.nhathm.user.dto.clientobject.UserCO;
-import org.nhathm.user.dto.query.UserListByPageQry;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,12 +12,13 @@ import org.springframework.stereotype.Component;
  */
 @RequiredArgsConstructor
 @Component
-public class UserListByPageQryExe {
+public class UserCurrentExe {
 
     private final UserRepository userRepository;
 
-    public PageResponse<UserCO> execute(UserListByPageQry qry) {
-        // TODO:
-        return null;
+    private final UserAssembler userAssembler;
+
+    public SingleResponse<UserCO> execute() {
+        return SingleResponse.buildSuccess();
     }
 }

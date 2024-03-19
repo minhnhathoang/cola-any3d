@@ -4,16 +4,12 @@ import com.alibaba.cola.dto.ClientObject;
 import domain.security.common.AccessToken;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
-import javax.validation.constraints.NotEmpty;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
 @Builder
-@Accessors(chain = true)
+@Data
 public class AuthLoginCO extends ClientObject {
 
     private String username;

@@ -5,8 +5,9 @@ import org.nhathm.domain.user.entity.User;
 import org.nhathm.domain.user.entity.UserDetails;
 import org.nhathm.domain.user.gateway.UserGateway;
 import org.nhathm.user.database.UserConvertor;
-import org.nhathm.user.database.UserMapper;
+import org.nhathm.user.database.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +17,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserGatewayImpl implements UserGateway {
 
-    private final UserMapper userMapper;
+    private final UserRepository userRepository;
 
     private final UserConvertor userConvertor;
+
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * for Security
@@ -28,21 +31,26 @@ public class UserGatewayImpl implements UserGateway {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return userConvertor.toUserDetails(
+                userRepository.findById(username).orElseThrow(() -> {
+                    throw new UsernameNotFoundException("User not found");
+                })
+        );
     }
 
     @Override
-    public void save(User user) {
-        userMapper.insert(userConvertor.toDataObject(user));
+    public boolean existsByUsername(String username) {
+        return userRepository.existsById(username);
     }
 
     @Override
-    public void updateById(User user) {
-        userMapper.updateById(userConvertor.toDataObject(user));
+    public void create(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(userConvertor.toDataObject(user));
     }
 
     @Override
-    public void deleteById(User user) {
-        userMapper.deleteById(user.getId());
+    public void update(User user) {
+        userRepository.save(userConvertor.toDataObject(user));
     }
 }

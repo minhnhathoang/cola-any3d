@@ -4,14 +4,13 @@ import com.alibaba.cola.dto.PageResponse;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
-import org.nhathm.app.user.executor.command.UserAddCmdExe;
 import org.nhathm.app.user.executor.command.UserDeleteCmdExe;
 import org.nhathm.app.user.executor.command.UserUpdateCmdExe;
 import org.nhathm.app.user.executor.query.UserByIdQryExe;
+import org.nhathm.app.user.executor.query.UserCurrentExe;
 import org.nhathm.app.user.executor.query.UserListByPageQryExe;
 import org.nhathm.user.api.UserService;
 import org.nhathm.user.dto.clientobject.UserCO;
-import org.nhathm.user.dto.command.UserAddCmd;
 import org.nhathm.user.dto.command.UserDeleteCmd;
 import org.nhathm.user.dto.command.UserUpdateCmd;
 import org.nhathm.user.dto.query.UserByIdQry;
@@ -25,20 +24,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserAddCmdExe userAddCmdExe;
-
     private final UserUpdateCmdExe userUpdateCmdExe;
 
     private final UserDeleteCmdExe userDeleteCmdExe;
 
+    private final UserCurrentExe userCurrentExe;
+
     private final UserByIdQryExe userByIdQryExe;
 
     private final UserListByPageQryExe userListByPageQryExe;
-
-    @Override
-    public Response addUser(UserAddCmd cmd) {
-        return userAddCmdExe.execute(cmd);
-    }
 
     @Override
     public Response updateUser(UserUpdateCmd cmd) {
@@ -48,6 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Response deleteUser(UserDeleteCmd cmd) {
         return userDeleteCmdExe.execute(cmd);
+    }
+
+    @Override
+    public SingleResponse<UserCO> getCurrentUser() {
+        return userCurrentExe.execute();
     }
 
     @Override

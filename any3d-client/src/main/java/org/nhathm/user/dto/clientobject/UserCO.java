@@ -14,5 +14,5 @@ import javax.validation.constraints.NotEmpty;
 public class UserCO extends ClientObject {
 
     @NotEmpty
-    private String userId;
+    private String username;
 }

@@ -18,36 +18,31 @@ spring:
     username: admin
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
   security:
     jwt:
       enabled: true
       header: Authorization
-      base64Secret: aG91c2VtZWFsZ3Jld21hc3Nwcml2YXRldGVycmlibGVmb290YmFsbGhhbGZ3YXliZWc=
-      secret: 4322432423
+      base64Secret: "c2VjcmV0CmlkZW50aWZpZXJzCnNlY3JldA=="
+      secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       tokenValidityInSeconds: 1800
       tokenValidityInSecondsForRememberMe: 2592000
       anonymousUrls:
-        - /public/**    # Example anonymous URL pattern
-        - /login        # Another example
+        - /api/auth/login
+        - /api/auth/register
       permitAllUrls:
-        - /permit/all/**   # Example permit all URL pattern
-        - /public/**       # Another example
+
       authenticatedUrls:
-        - /secure/**    # Example authenticated URL pattern
-        - /api/**       # Another example
+        - /api/users/**
 
 minio:
   url: http://localhost:9000
   username: minioadmin
   password: minioadmin
-
-mybatis-plus:
-  global-config:
-    banner: false
-  configuration:
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-    map-underscore-to-camel-case: true
-    auto-mapping-behavior: full
-    call-setters-on-nulls: true
-    use-column-label: true

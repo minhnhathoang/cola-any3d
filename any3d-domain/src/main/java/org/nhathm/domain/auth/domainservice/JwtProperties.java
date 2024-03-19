@@ -1,4 +1,4 @@
-package org.nhathm.config;
+package org.nhathm.domain.auth.domainservice;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

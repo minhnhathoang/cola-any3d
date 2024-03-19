@@ -1,8 +1,7 @@
 package org.nhathm.domain.auth.domainservice.impl;
 
 import org.nhathm.domain.auth.domainservice.AuthDomainService;
-
-import org.nhathm.domain.auth.gateway.LoginGateway;
+import org.nhathm.domain.auth.gateway.AuthGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +13,5 @@ import org.springframework.stereotype.Service;
 public class AuthDomainServiceImpl implements AuthDomainService {
 
     @Autowired
-    private LoginGateway loginGateway;
+    private AuthGateway authGateway;
 }

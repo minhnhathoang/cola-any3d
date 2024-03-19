@@ -3,28 +3,39 @@ package org.nhathm.domain.auth.domainservice;
 import domain.security.common.AccessToken;
 import domain.security.common.JwtConstants;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 import util.Strings;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
-@Component
-public class JwtTokenProvider {
+public class JwtTokenProvider implements InitializingBean {
 
-    private JwtConfig jwtConfig;
+    @Value("${ejwt.public.key}")
+    RSAPublicKey publicKey;
+
+    @Value("${ejwt.private.key}")
+    RSAPrivateKey privateKey;
+
+    private final JwtConfig jwtConfig;
 
     private final JwtTokenStore tokenStore;
 
@@ -36,18 +47,16 @@ public class JwtTokenProvider {
 
     private long tokenValidityInMillisecondsForRememberMe;
 
-//	@Override
-//	public void afterPropertiesSet() {
-//		byte[] keyBytes = jwtConfig.getBase64Secret() != null ?
-//			Decoders.BASE64.decode(jwtConfig.getBase64Secret()) :
-//			jwtConfig.getSecret().getBytes();
-//
-//		key = Keys.hmacShaKeyFor(keyBytes);
-//		this.jwtParser = Jwts.parser()
-//				.verifyWith((SecretKey) key).build();
-//		this.tokenValidityInMilliseconds = 1000 * jwtConfig.getTokenValidityInSeconds();
-//		this.tokenValidityInMillisecondsForRememberMe = 1000 * jwtConfig.getTokenValidityInSecondsForRememberMe();
-//	}
+    @Override
+    public void afterPropertiesSet() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecret());
+        key = Keys.hmacShaKeyFor(keyBytes);
+
+        this.jwtParser = Jwts.parser()
+                .verifyWith((SecretKey) key).build();
+        this.tokenValidityInMilliseconds = 1000 * jwtConfig.getTokenValidityInSeconds();
+        this.tokenValidityInMillisecondsForRememberMe = 1000 * jwtConfig.getTokenValidityInSecondsForRememberMe();
+    }
 
     public AccessToken createToken(Authentication authentication, boolean rememberMe, Map<String, Object> claims) {
         if (CollectionUtils.isNotEmpty(authentication.getAuthorities())) {
@@ -72,7 +81,7 @@ public class JwtTokenProvider {
                 .builder()
                 .setSubject(subject)
                 .addClaims(claims)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiration)
                 .compact();
 
