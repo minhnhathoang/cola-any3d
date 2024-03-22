@@ -37,7 +37,7 @@ public class UserController {
         return userService.deleteUser(UserDeleteCmd.builder().userId(id).build());
     }
 
-    @GetMapping("/current")
+    @GetMapping("/me/profile")
     public SingleResponse<Object> getCurrentUser() {
         return SingleResponse.of(SecurityContextHolder.getContext().getAuthentication());
     }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
+
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
@@ -31,5 +33,11 @@ public class AuthController {
     @PostMapping("/register")
     public Response register(@RequestBody AuthRegisterCmd cmd) {
         return authService.register(cmd);
+    }
+
+    @Transactional
+    @PostMapping("/logout")
+    public Response logout() {
+        return authService.logout();
     }
 }

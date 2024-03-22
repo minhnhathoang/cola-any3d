@@ -11,6 +11,7 @@ public class InMemoryJwtAutoConfiguration {
 
     private static final String AUTOWIRED_IN_MEMORY_JWT_TOKEN_STORE = "Autowired InMemoryJwtTokenStore";
 
+
     @ConditionalOnMissingBean
     @Bean
     public JwtTokenStore tokenStore() {
@@ -23,12 +24,10 @@ public class InMemoryJwtAutoConfiguration {
 
             @Override
             public void storeAccessToken(AccessToken token) {
-
             }
 
             @Override
             public void removeAccessToken(AccessToken token) {
-
             }
         };
     }

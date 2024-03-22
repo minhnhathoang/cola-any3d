@@ -14,4 +14,6 @@ public interface AuthService {
     SingleResponse<AuthLoginCO> login(AuthLoginQry qry);
 
     Response register(AuthRegisterCmd cmd);
+
+    Response logout();
 }
