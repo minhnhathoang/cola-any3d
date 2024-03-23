@@ -41,8 +41,14 @@ spring:
 
       authenticatedUrls:
         - /api/users/**
+  kafka:
+    bootstrap-servers: localhost:9092
+  message-queue:
+    dynamic:
+      primary: Kafka
 
 minio:
   url: http://localhost:9000
   username: minioadmin
   password: minioadmin
+

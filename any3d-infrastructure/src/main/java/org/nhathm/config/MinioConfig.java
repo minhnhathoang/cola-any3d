@@ -3,13 +3,16 @@ package org.nhathm.config;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
+import io.minio.UploadObjectArgs;
+import io.minio.errors.MinioException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
-//@Configuration
+@Configuration
 public class MinioConfig {
 
     public static final String COMMON_BUCKET_NAME = "common";
@@ -25,14 +28,28 @@ public class MinioConfig {
 
     @Bean
     public MinioClient minioClient() throws Exception {
-        MinioClient client = MinioClient.builder()
-                .endpoint(minioUrl)
-                .credentials(minioUsername, minioPassword)
-                .build();
+        try {
+            MinioClient minioClient = MinioClient.builder()
+                    .endpoint(minioUrl)
+                    .credentials(minioUsername, minioPassword)
+                    .build();
 
-        if (!client.bucketExists(BucketExistsArgs.builder().bucket(COMMON_BUCKET_NAME).build())) {
-            client.makeBucket(MakeBucketArgs.builder().bucket(COMMON_BUCKET_NAME).build());
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(COMMON_BUCKET_NAME).build())) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(COMMON_BUCKET_NAME).build());
+            }
+
+            minioClient.uploadObject(
+                    UploadObjectArgs.builder()
+                            .bucket(COMMON_BUCKET_NAME)
+                            .object("docker-compose.yml")
+                            .filename("D:\\cola\\any3d\\docker-compose.yml")
+                            .build());
+
+            return minioClient;
+        } catch (MinioException e) {
+            throw new Exception("Error occurred: " + e);
         }
-        return client;
+
+
     }
 }
