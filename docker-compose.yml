@@ -10,6 +10,10 @@ x-minio-common: &minio-common
   environment:
     MINIO_ROOT_USER: minioadmin
     MINIO_ROOT_PASSWORD: minioadmin
+    MINIO_NOTIFY_KAFKA_ENABLE: on
+    MINIO_NOTIFY_KAFKA_BROKERS: kafka:9092
+    MINIO_NOTIFY_KAFKA_TOPIC: minio-events
+
   healthcheck:
     test: [ "CMD", "mc", "ready", "local" ]
     interval: 5s
@@ -20,6 +24,32 @@ x-minio-common: &minio-common
 # using nginx reverse proxy, load balancing, you can access
 # it through port 9000.
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.19.96.1:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -75,20 +105,20 @@ services:
       - minio3
       - minio4
 
-  nginx_proxy_mgr:
-    image: 'docker.io/jc21/nginx-proxy-manager:latest'
-    ports:
-      - '80:80'
-      - '81:81'
-      - '443:443'
-    volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
-    depends_on:
-      - minio1
-      - minio2
-      - minio3
-      - minio4
+#  nginx_proxy_mgr:
+#    image: 'docker.io/jc21/nginx-proxy-manager:latest'
+#    ports:
+#      - '80:80'
+#      - '81:81'
+#      - '443:443'
+#    volumes:
+#      - ./data:/data
+#      - ./letsencrypt:/etc/letsencrypt
+#    depends_on:
+#      - minio1
+#      - minio2
+#      - minio3
+#      - minio4
 
 ## By default, this config uses default local driver,
 ## For custom volumes replace with volume driver configuration.

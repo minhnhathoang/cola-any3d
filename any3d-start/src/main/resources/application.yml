@@ -13,6 +13,8 @@ ejwt:
   public.key: classpath:app.pub
 
 spring:
+  application:
+    name: any3d
   datasource:
     url: jdbc:mysql://localhost:3306/any3d
     username: admin
@@ -43,6 +45,29 @@ spring:
         - /api/users/**
   kafka:
     bootstrap-servers: localhost:9092
+    client-id: ${spring.application.name}
+    producer:
+      acks: all
+      batch-size: 4KB
+      buffer-memory: 40960
+      retries: 3
+      compression-type: lz4
+    consumer:
+      group-id: ${spring.application.name}
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      heartbeat-interval: 5000
+      max-poll-records: 100
+      fetch-max-wait: 3000
+      fetch-min-size: 4096
+      isolation-level: READ_COMMITTED
+    listener:
+      type: BATCH
+      ack-mode: MANUAL_IMMEDIATE
+      concurrency: 5
+      poll-timeout: 5000
+      idle-between-polls: 0
+      idle-event-interval: 0
   message-queue:
     dynamic:
       primary: Kafka

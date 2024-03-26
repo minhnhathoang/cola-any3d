@@ -17,6 +17,8 @@ public class MinioConfig {
 
     public static final String COMMON_BUCKET_NAME = "common";
 
+    public static final int PRESIGNED_URL_EXPIRY = 60 * 60 * 24;
+
     @Value("${minio.url}")
     private String minioUrl;
 

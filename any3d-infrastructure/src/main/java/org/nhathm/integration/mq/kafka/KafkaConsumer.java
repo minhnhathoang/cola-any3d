@@ -39,7 +39,7 @@ public class KafkaConsumer implements InitializingBean, DisposableBean {
 
     private final List<Consumer<String, String>> consumers = Lists.newArrayList();
 
-    private final KafkaProperties kafkaConfig;
+    private final KafkaProperties kafkaProperties;
 
     private final List<MessageQueueConsumer> messageQueueConsumers;
 
@@ -66,11 +66,11 @@ public class KafkaConsumer implements InitializingBean, DisposableBean {
                 while (threadRunning.get()) {
                     try {
                         ConsumerRecords<String, String> consumerRecords =
-                                consumer.poll(kafkaConfig.getConsumer().getFetchMaxWait());
+                                consumer.poll(kafkaProperties.getConsumer().getFetchMaxWait());
                         if (consumerRecords == null || consumerRecords.isEmpty()) {
                             continue;
                         }
-                        int maxPollRecords = kafkaConfig.getConsumer().getMaxPollRecords();
+                        int maxPollRecords = kafkaProperties.getConsumer().getMaxPollRecords();
                         Map<TopicPartition, OffsetAndMetadata> offsets = Maps.newHashMapWithExpectedSize(maxPollRecords);
                         List<Message> messages = Lists.newArrayListWithCapacity(consumerRecords.count());
                         consumerRecords.forEach(record -> {
@@ -111,13 +111,13 @@ public class KafkaConsumer implements InitializingBean, DisposableBean {
         String topic = annotation.topic();
 
         String group = null;
-        if (StringUtils.isNotBlank(kafkaConfig.getConsumer().getGroupId())) {
-            group = kafkaConfig.getConsumer().getGroupId() + Strings.UNDERLINE + topic;
+        if (StringUtils.isNotBlank(kafkaProperties.getConsumer().getGroupId())) {
+            group = kafkaProperties.getConsumer().getGroupId() + Strings.UNDERLINE + topic;
         } else if (StringUtils.isNotBlank(annotation.group())) {
             group = annotation.group();
         }
 
-        Consumer<String, String> consumer = consumerFactory.createConsumer(group, kafkaConfig.getClientId());
+        Consumer<String, String> consumer = consumerFactory.createConsumer(group, kafkaProperties.getClientId());
         consumer.subscribe(Collections.singleton(topic));
 
         log.debug(CREATE_CONSUMER_FROM_CONSUMER_FACTORY_GROUP_TOPIC, group, topic);

@@ -1,20 +1,15 @@
 package org.nhathm.app.object.service;
 
-import com.alibaba.cola.dto.PageResponse;
-import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.cola.exception.BizException;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.MinioClient;
+import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
-import org.nhathm.app.object.executor.command.UserDeleteCmdExe;
-import org.nhathm.app.object.executor.command.UserUpdateCmdExe;
-import org.nhathm.app.object.executor.query.UserByIdQryExe;
-import org.nhathm.app.object.executor.query.UserCurrentExe;
-import org.nhathm.app.object.executor.query.UserListByPageQryExe;
-import org.nhathm.user.api.UserService;
-import org.nhathm.user.dto.clientobject.UserCO;
-import org.nhathm.user.dto.command.UserDeleteCmd;
-import org.nhathm.user.dto.command.UserUpdateCmd;
-import org.nhathm.user.dto.query.UserByIdQry;
-import org.nhathm.user.dto.query.UserListByPageQry;
+import org.nhathm.config.MinioConfig;
+import org.nhathm.object.api.ObjectService;
+import org.nhathm.object.dto.clientobject.PresignedUrlCO;
+import org.nhathm.object.dto.query.ObjectGetPresignedUrlQry;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,40 +17,27 @@ import org.springframework.stereotype.Service;
  */
 @RequiredArgsConstructor
 @Service
-public class ObjectServiceImpl implements UserService {
+public class ObjectServiceImpl implements ObjectService {
 
-    private final UserUpdateCmdExe userUpdateCmdExe;
-
-    private final UserDeleteCmdExe userDeleteCmdExe;
-
-    private final UserCurrentExe userCurrentExe;
-
-    private final UserByIdQryExe userByIdQryExe;
-
-    private final UserListByPageQryExe userListByPageQryExe;
+    private final MinioClient minioClient;
 
     @Override
-    public Response updateUser(UserUpdateCmd cmd) {
-        return userUpdateCmdExe.execute(cmd);
-    }
-
-    @Override
-    public Response deleteUser(UserDeleteCmd cmd) {
-        return userDeleteCmdExe.execute(cmd);
-    }
-
-    @Override
-    public SingleResponse<UserCO> getCurrentUser() {
-        return userCurrentExe.execute();
-    }
-
-    @Override
-    public SingleResponse<UserCO> getUserBy(UserByIdQry qry) {
-        return userByIdQryExe.execute(qry);
-    }
-
-    @Override
-    public PageResponse<UserCO> listUserBy(UserListByPageQry qry) {
-        return userListByPageQryExe.execute(qry);
+    public SingleResponse<PresignedUrlCO> getPresignedUrl(ObjectGetPresignedUrlQry qry) {
+        try {
+            String url = minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.valueOf(qry.getMethod()))
+                            .bucket(MinioConfig.COMMON_BUCKET_NAME)
+                            .object(qry.getFileName())
+                            .expiry(MinioConfig.PRESIGNED_URL_EXPIRY)
+                            .build()
+            );
+            return SingleResponse.of(PresignedUrlCO.builder()
+                    .url(url)
+                    .expiry(MinioConfig.PRESIGNED_URL_EXPIRY)
+                    .build());
+        } catch (Exception e) {
+            throw new BizException("object.getPresignedUrl.failed", e);
+        }
     }
 }

@@ -1,10 +1,15 @@
 package org.nhathm.object;
 
+import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.constant.APIConstant;
 import org.nhathm.object.api.ObjectService;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.nhathm.object.dto.clientobject.PresignedUrlCO;
+import org.nhathm.object.dto.query.ObjectGetPresignedUrlQry;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
@@ -16,20 +21,8 @@ public class ObjectController {
 
     private final ObjectService objectService;
 
-    @PostMapping("/upload")
-    public void upload(
-            @RequestPart("file") MultipartFile object,
-            @RequestPart("projectId") String projectId) {
-
-    }
-
-    @GetMapping("/download")
-    public void download() {
-
-    }
-
-    @DeleteMapping("/delete")
-    public void delete() {
-
+    @PostMapping("/getPresignedUrl")
+    public SingleResponse<PresignedUrlCO> getPresignedUrl(@RequestBody ObjectGetPresignedUrlQry qry) {
+        return objectService.getPresignedUrl(qry);
     }
 }
