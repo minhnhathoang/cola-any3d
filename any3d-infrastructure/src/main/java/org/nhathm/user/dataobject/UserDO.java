@@ -23,7 +23,7 @@ public class UserDO {
     @Id
     private String username;
 
-    private String email;
-
     private String hashedPassword;
+
+    private Long userInfoId;
 }
