@@ -1,5 +1,6 @@
 package org.nhathm.domain.auth.domainservice;
 
+import com.alibaba.cola.exception.SysException;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,8 +21,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import util.Strings;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,13 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtTokenProvider implements InitializingBean {
 
-    @Value("${ejwt.public.key}")
-    RSAPublicKey rsaPublicKey;
-
-    @Value("${ejwt.private.key}")
-    RSAPrivateKey rsaPrivateKey;
-
-    private final JwtConfig jwtConfig;
+    private final JwtProperties jwtProperties;
 
     private final JwtTokenStore tokenStore;
 
@@ -50,9 +42,9 @@ public class JwtTokenProvider implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        this.jwsVerifier = new RSASSAVerifier(rsaPublicKey);
-        this.tokenValidityInMilliseconds = 1000 * jwtConfig.getTokenValidityInSeconds();
-        this.tokenValidityInMillisecondsForRememberMe = 1000 * jwtConfig.getTokenValidityInSecondsForRememberMe();
+        this.jwsVerifier = new RSASSAVerifier(jwtProperties.getRsaPublicKey());
+        this.tokenValidityInMilliseconds = 1000 * jwtProperties.getTokenValidityInSeconds();
+        this.tokenValidityInMillisecondsForRememberMe = 1000 * jwtProperties.getTokenValidityInSecondsForRememberMe();
     }
 
     public AccessToken createToken(Authentication authentication, boolean rememberMe, Map<String, Object> claims) {
@@ -83,7 +75,7 @@ public class JwtTokenProvider implements InitializingBean {
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
         try {
-            jwsObject.sign(new RSASSASigner(rsaPrivateKey, true));
+            jwsObject.sign(new RSASSASigner(jwtProperties.getRsaPrivateKey(), true));
             AccessToken accessToken = AccessToken.builder()
                     .value(jwsObject.serialize())
                     .expiration(expiration)
@@ -93,22 +85,25 @@ public class JwtTokenProvider implements InitializingBean {
             }
             return accessToken;
         } catch (Exception e) {
-            log.error("生成令牌失败", e);
-            throw new UnauthorizedException("生成令牌失败");
+            log.error("JWT signing failed", e);
+            throw new SysException("JWT signing failed");
         }
     }
 
-    public boolean validateToken(@NotNull AccessToken accessToken) {
+    public void validateToken(@NotNull AccessToken accessToken) {
         if (tokenStore != null && !tokenStore.validateAccessToken(accessToken)) {
-            throw new UnauthorizedException("存储的令牌不存在");
+            throw new UnauthorizedException("The stored token does not exist or has expired");
         }
         try {
             SignedJWT signedJWT = SignedJWT.parse(accessToken.getValue());
-            return signedJWT.verify(this.jwsVerifier);
-
+            if (!signedJWT.verify(jwsVerifier)) {
+                throw new UnauthorizedException("JWT signature verification failed");
+            }
+            if (new Date().after(signedJWT.getJWTClaimsSet().getExpirationTime())) {
+                throw new UnauthorizedException("JWT has expired");
+            }
         } catch (ParseException | JOSEException e) {
-            log.error("JWT", e);
-            throw new UnauthorizedException("JWT");
+            throw new SysException("JWT parsing failed");
         }
     }
 
@@ -120,7 +115,6 @@ public class JwtTokenProvider implements InitializingBean {
 
     public Authentication getAuthentication(AccessToken accessToken) {
         JWTClaimsSet claimsSet = parseClaimsSet(accessToken);
-
         Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
         if (claimsSet.getClaims().containsKey(JwtConstants.AUTHORITIES_KEY)) {
             authorities = Arrays

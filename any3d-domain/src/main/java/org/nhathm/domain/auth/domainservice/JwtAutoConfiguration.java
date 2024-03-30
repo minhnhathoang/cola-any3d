@@ -19,27 +19,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @Configuration(proxyBeanMethods = false)
 public class JwtAutoConfiguration {
-    private final JwtProperties jwtProperties;
 
     @ConditionalOnMissingBean
     @Bean
-    public JwtTokenProvider jwtTokenProvider(JwtTokenStore jwtTokenStore) {
-        JwtConfig jwtConfig = JwtConfig.builder()
-                .header(jwtProperties.getHeader())
-                .secret(jwtProperties.getSecret())
-                .base64Secret(jwtProperties.getBase64Secret())
-                .tokenValidityInSeconds(jwtProperties.getTokenValidityInSeconds())
-                .tokenValidityInSecondsForRememberMe(jwtProperties.getTokenValidityInSecondsForRememberMe())
-                .anonymousUrls(jwtProperties.getAnonymousUrls())
-                .authenticatedUrls(jwtProperties.getAuthenticatedUrls())
-                .permitAllUrls(jwtProperties.getPermitAllUrls())
-                .build();
-        return new JwtTokenProvider(jwtConfig, jwtTokenStore);
+    public JwtTokenProvider jwtTokenProvider(JwtProperties jwtProperties, JwtTokenStore jwtTokenStore) {
+        return new JwtTokenProvider(jwtProperties, jwtTokenStore);
     }
 
     @ConditionalOnMissingBean
     @Bean
-    public JwtTokenService jwtTokenService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public JwtTokenService jwtTokenService(AuthenticationManager authenticationManager,
+                                           JwtTokenProvider jwtTokenProvider) {
         return new JwtTokenService(authenticationManager, jwtTokenProvider);
     }
 }

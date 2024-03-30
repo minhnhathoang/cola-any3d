@@ -1,4 +1,3 @@
-
 package util;
 
 import lombok.Getter;
@@ -65,8 +64,6 @@ public enum PrimitiveType {
     @Getter
     private final Class<?> wrapperClass;
 
-    public abstract Object cast(String value);
-
     PrimitiveType(Class<?> wrapperClass) {
         this.wrapperClass = wrapperClass;
     }
@@ -79,4 +76,6 @@ public enum PrimitiveType {
         }
         return null;
     }
+
+    public abstract Object cast(String value);
 }

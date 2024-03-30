@@ -26,16 +26,13 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = String.valueOf(authentication.getCredentials());
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if (userDetails != null) {
             if (passwordEncoder.matches(password, userDetails.getPassword())) {
-                UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
-                return authenticationToken;
+                return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
             }
         }
-        throw new BadCredentialsException("Error!!");
+        throw new BadCredentialsException("Bad credentials");
     }
 
     @Override

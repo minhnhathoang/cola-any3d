@@ -44,15 +44,12 @@ import java.security.interfaces.RSAPublicKey;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${ejwt.public.key}")
-    RSAPublicKey publicKey;
-
-    @Value("${ejwt.private.key}")
-    RSAPrivateKey privateKey;
-
     private final JwtAuthenticationProvider customAuthenticationProvider;
-
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    @Value("${spring.security.jwt.public.key}")
+    RSAPublicKey publicKey;
+    @Value("${spring.security.jwt.private.key}")
+    RSAPrivateKey privateKey;
 
     @Bean
     public AuthenticationManager authenticationManager(

@@ -1,14 +1,12 @@
 package org.nhathm.dto.event;
 
-import static org.nhathm.dto.event.DomainEventConstant.CUSTOMER_CREATED_TOPIC;
-
 /**
  * CustomerCreatedEvent
  *
  * @author Frank Zhang
  * @date 2019-01-04 10:32 AM
  */
-public class CustomerCreatedEvent{
+public class CustomerCreatedEvent {
 
     private String customerId;
 

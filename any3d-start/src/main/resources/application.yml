@@ -8,10 +8,6 @@ logging:
     org.springframework.security: DEBUG
 #    org.springframework.boot.autoconfigure: DEBUG
 
-ejwt:
-  private.key: classpath:app.key
-  public.key: classpath:app.pub
-
 spring:
   application:
     name: any3d
@@ -30,12 +26,13 @@ spring:
 
   security:
     jwt:
-      enabled: true
       header: Authorization
-      base64Secret: "c2VjcmV0CmlkZW50aWZpZXJzCnNlY3JldA=="
-      secret: 5pAq6zRyX8bC3dV2wS7gN1mK9jF0hL4tUoP6iBvE3nG8xZaQrY7cW2fA
-      tokenValidityInSeconds: 10
-      tokenValidityInSecondsForRememberMe: 2592000
+      private:
+        key: classpath:app.key
+      public:
+        key: classpath:app.pub
+      tokenValidityInSeconds: 1800 # 30 minutes
+      tokenValidityInSecondsForRememberMe: 2592000 # 30 days
       anonymousUrls:
         - /api/auth/login
         - /api/auth/register

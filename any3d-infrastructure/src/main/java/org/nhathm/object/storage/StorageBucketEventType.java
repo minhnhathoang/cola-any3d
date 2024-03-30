@@ -35,15 +35,15 @@ public enum StorageBucketEventType {
     s3_Scanner_ManyVersions,
     s3_Scanner_BigPrefix;
 
-    public String toEventName() {
-        return this.name().replace("_", ":");
-    }
-
     public static StorageBucketEventType fromEventName(String eventName) {
         try {
             return StorageBucketEventType.valueOf(eventName.replace(":", "_"));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid bucket event name: " + eventName);
         }
+    }
+
+    public String toEventName() {
+        return this.name().replace("_", ":");
     }
 }

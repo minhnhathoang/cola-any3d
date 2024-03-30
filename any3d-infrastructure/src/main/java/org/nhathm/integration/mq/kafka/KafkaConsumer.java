@@ -29,14 +29,10 @@ import java.util.function.Function;
 @Slf4j
 public class KafkaConsumer implements InitializingBean, DisposableBean {
 
-    private static final String KAFKA_CONSUMER_PROCESSOR_CONSUME_ERROR = "KafkaConsumerProcessor consume error: {}";
-
     public static final String INITIALIZING_KAFKA_CONSUMER = "Initializing KafkaConsumer";
-
     public static final String DESTROY_KAFKA_CONSUMER = "Destroy KafkaConsumer";
-
     public static final String CREATE_CONSUMER_FROM_CONSUMER_FACTORY_GROUP_TOPIC = "Create consumer from consumerFactory, group: {}, topic: {}";
-
+    private static final String KAFKA_CONSUMER_PROCESSOR_CONSUME_ERROR = "KafkaConsumerProcessor consume error: {}";
     private final List<Consumer<String, String>> consumers = Lists.newArrayList();
 
     private final KafkaProperties kafkaProperties;

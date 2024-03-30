@@ -14,15 +14,11 @@ import java.util.List;
 
 public class IpConfigUtils {
 
-    private static final String X_FORWARDED_FOR = "X-Forwarded-For";
-
-    private static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
-
-    private static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
-
-    private static final String IP_ADDRESS = getIpAddress(null);
-
     public static final String SUBNET_MASK = "255.255.255.0";
+    private static final String X_FORWARDED_FOR = "X-Forwarded-For";
+    private static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
+    private static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
+    private static final String IP_ADDRESS = getIpAddress(null);
 
     /**
      * 获取IP地址

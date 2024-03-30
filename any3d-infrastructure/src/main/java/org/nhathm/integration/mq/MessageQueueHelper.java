@@ -8,11 +8,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageQueueHelper {
 
-    private final ApplicationContext applicationContext;
-
-    private final String primary;
-
     private static final String MQ_TYPE_NOT_FOUND = "Message queue type named '{}' not found";
+    private final ApplicationContext applicationContext;
+    private final String primary;
 
     public MessageQueueProvider getBean() {
         return getBean(primary);

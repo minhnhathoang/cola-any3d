@@ -66,7 +66,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private AccessToken resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(jwtTokenProvider.getJwtConfig().getHeader());
+        String bearerToken = request.getHeader(jwtTokenProvider.getJwtProperties().getHeader());
         if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(JwtConstants.BEARER_PREFIX)) {
             return AccessToken.builder().value(bearerToken.substring(JwtConstants.BEARER_PREFIX.length())).build();
         }
@@ -74,7 +74,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private boolean isAnonymousUrls(HttpServletRequest request) {
-        List<String> anonymousUrls = jwtTokenProvider.getJwtConfig().getAnonymousUrls();
+        List<String> anonymousUrls = jwtTokenProvider.getJwtProperties().getAnonymousUrls();
         if (CollectionUtils.isEmpty(anonymousUrls)) {
             return false;
         }

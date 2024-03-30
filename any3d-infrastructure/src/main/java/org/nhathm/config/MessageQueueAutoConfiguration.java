@@ -15,10 +15,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class MessageQueueAutoConfiguration {
 
-    private final ApplicationContext applicationContext;
-
     public static final String AUTOWIRED_MESSAGE_QUEUE_HELPER = "Autowired MessageQueueHelper";
-
+    private final ApplicationContext applicationContext;
     private final MessageQueueProperties messageQueueProperties;
 
     @Bean

@@ -8,9 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = MessageQueueProperties.PREFIX)
 public class MessageQueueProperties {
 
-	public static final String PREFIX = "spring.message-queue.dynamic";
+    public static final String PREFIX = "spring.message-queue.dynamic";
 
-	private boolean enabled;
+    private boolean enabled;
 
-	private String primary = "Kafka";
+    private String primary = "Kafka";
 }
