@@ -1,5 +1,6 @@
 package org.nhathm.config;
 
+import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import java.util.Optional;
  */
 @EnableJpaAuditing(auditorAwareRef = "customAuditorAware")
 @Configuration
+@RequiredArgsConstructor
 public class AppConfig {
 
     @Bean
@@ -37,8 +39,17 @@ public class AppConfig {
         };
     }
 
+//    private final UserGateway userGateway;
+
 //    @Bean
-//    public FilterChainProxy filterChainProxy(SecurityFilterChain chain) {
-//        return new FilterChainProxy(chain);
+//    ApplicationRunner applicationRunner() {
+//        return args -> {
+//            if (userGateway.existsByUsername("admin")) {
+//                userGateway.create(User.builder()
+//                        .username("admin")
+//                        .password("password")
+//                        .build());
+//            }
+//        };
 //    }
 }

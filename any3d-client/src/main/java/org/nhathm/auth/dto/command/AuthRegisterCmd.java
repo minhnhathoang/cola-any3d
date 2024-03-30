@@ -1,9 +1,9 @@
 package org.nhathm.auth.dto.command;
 
-import com.alibaba.cola.dto.Command;
 import com.alibaba.cola.dto.Query;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -12,9 +12,13 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class AuthRegisterCmd extends Query {
 
-    @NotBlank(message = "username can't be blank")
+    @NotBlank
     private String username;
 
-    @NotBlank(message = "password can't be blank")
+    @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @NotBlank
+    private String email;
+
+    @NotBlank
     private String password;
 }

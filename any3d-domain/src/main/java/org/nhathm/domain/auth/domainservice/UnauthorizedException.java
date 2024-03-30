@@ -8,6 +8,6 @@ import com.alibaba.cola.exception.BaseException;
 public class UnauthorizedException extends BaseException {
 
     public UnauthorizedException(String errMessage) {
-        super("USER-LOGIN-401", errMessage);
+        super("AUTH-LOGIN-401", errMessage);
     }
 }

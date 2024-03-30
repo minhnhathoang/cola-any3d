@@ -1,6 +1,6 @@
 package org.nhathm.domain.auth.domainservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,32 +14,22 @@ import org.springframework.stereotype.Component;
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
+@RequiredArgsConstructor
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        // In BasicController.login() method, we call authenticationManager.authenticate(token)
-        // Then, Authentication Manager calls AuthenticationProvider's authenticate method.
-        // Since JwtAuthenticationProvider is our custom authentication provider,
-        // this method will be executed.
         String username = authentication.getName();
         String password = String.valueOf(authentication.getCredentials());
 
-        // Fetching user as wrapped with UserDetails object
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        // If user is not null, then we check if password matches
         if (userDetails != null) {
             if (passwordEncoder.matches(password, userDetails.getPassword())) {
-                // if it matches, then we can initialize UsernamePasswordAuthenticationToken.
-                // Attention! We used its 3 parameters constructor.
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
                 return authenticationToken;
@@ -48,8 +38,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         throw new BadCredentialsException("Error!!");
     }
 
-    // Authentication Manager checks if the token is supported by this filter
-    // to avoid unnecessary checks.
     @Override
     public boolean supports(Class<?> authenticationType) {
         return UsernamePasswordAuthenticationToken.class.equals(authenticationType);

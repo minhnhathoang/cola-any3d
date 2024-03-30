@@ -33,8 +33,8 @@ spring:
       enabled: true
       header: Authorization
       base64Secret: "c2VjcmV0CmlkZW50aWZpZXJzCnNlY3JldA=="
-      secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      tokenValidityInSeconds: 1800
+      secret: 5pAq6zRyX8bC3dV2wS7gN1mK9jF0hL4tUoP6iBvE3nG8xZaQrY7cW2fA
+      tokenValidityInSeconds: 10
       tokenValidityInSecondsForRememberMe: 2592000
       anonymousUrls:
         - /api/auth/login

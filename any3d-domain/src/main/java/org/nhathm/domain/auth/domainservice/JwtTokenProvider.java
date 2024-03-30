@@ -1,12 +1,15 @@
 package org.nhathm.domain.auth.domainservice;
 
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import domain.security.common.AccessToken;
 import domain.security.common.JwtConstants;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.InitializingBean;
@@ -18,30 +21,28 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import util.Strings;
 
-import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
+@Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider implements InitializingBean {
 
     @Value("${ejwt.public.key}")
-    RSAPublicKey publicKey;
+    RSAPublicKey rsaPublicKey;
 
     @Value("${ejwt.private.key}")
-    RSAPrivateKey privateKey;
+    RSAPrivateKey rsaPrivateKey;
 
     private final JwtConfig jwtConfig;
 
     private final JwtTokenStore tokenStore;
 
-    private JwtParser jwtParser;
-
-    private Key key;
+    private JWSVerifier jwsVerifier;
 
     private long tokenValidityInMilliseconds;
 
@@ -49,11 +50,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecret());
-        key = Keys.hmacShaKeyFor(keyBytes);
-
-        this.jwtParser = Jwts.parser()
-                .verifyWith((SecretKey) key).build();
+        this.jwsVerifier = new RSASSAVerifier(rsaPublicKey);
         this.tokenValidityInMilliseconds = 1000 * jwtConfig.getTokenValidityInSeconds();
         this.tokenValidityInMillisecondsForRememberMe = 1000 * jwtConfig.getTokenValidityInSecondsForRememberMe();
     }
@@ -64,7 +61,6 @@ public class JwtTokenProvider implements InitializingBean {
                     .map(GrantedAuthority::getAuthority).collect(Collectors.joining(Strings.COMMA));
             claims.put(JwtConstants.AUTHORITIES_KEY, authorities);
         }
-
         return createToken(authentication.getName(), rememberMe, claims);
     }
 
@@ -76,41 +72,43 @@ public class JwtTokenProvider implements InitializingBean {
         } else {
             expiration = new Date(now + this.tokenValidityInMilliseconds);
         }
-
-        String value = Jwts
-                .builder()
-                .setSubject(subject)
-                .addClaims(claims)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .setExpiration(expiration)
-                .compact();
-
-        AccessToken accessToken = AccessToken.builder()
-                .value(value)
-                .expiration(expiration)
+        JWSHeader header = new JWSHeader(JWSAlgorithm.RS256);
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(subject)
+                .issuer("any3d-nhathm")
+                .issueTime(new Date())
+                .claim(JwtConstants.AUTHORITIES_KEY, claims.get(JwtConstants.AUTHORITIES_KEY))
+                .expirationTime(expiration)
                 .build();
-        if (tokenStore != null) {
-            tokenStore.storeAccessToken(accessToken);
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+        JWSObject jwsObject = new JWSObject(header, payload);
+        try {
+            jwsObject.sign(new RSASSASigner(rsaPrivateKey, true));
+            AccessToken accessToken = AccessToken.builder()
+                    .value(jwsObject.serialize())
+                    .expiration(expiration)
+                    .build();
+            if (tokenStore != null) {
+                tokenStore.storeAccessToken(accessToken);
+            }
+            return accessToken;
+        } catch (Exception e) {
+            log.error("生成令牌失败", e);
+            throw new UnauthorizedException("生成令牌失败");
         }
-        return accessToken;
     }
 
-    public void validateToken(@NotNull AccessToken accessToken) {
+    public boolean validateToken(@NotNull AccessToken accessToken) {
+        if (tokenStore != null && !tokenStore.validateAccessToken(accessToken)) {
+            throw new UnauthorizedException("存储的令牌不存在");
+        }
         try {
-            if (tokenStore != null && !tokenStore.validateAccessToken(accessToken)) {
-                throw new UnauthorizedException("存储的令牌不存在");
-            }
-            jwtParser.parseClaimsJws(accessToken.getValue());
-        } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException("令牌已失效");
-        } catch (UnsupportedJwtException e) {
-            throw new UnauthorizedException("不支持的令牌");
-        } catch (MalformedJwtException e) {
-            throw new UnauthorizedException("令牌格式错误");
-        } catch (SecurityException e) {
-            throw new UnauthorizedException("校验令牌不通过");
-        } catch (IllegalArgumentException e) {
-            throw new UnauthorizedException("校验令牌异常");
+            SignedJWT signedJWT = SignedJWT.parse(accessToken.getValue());
+            return signedJWT.verify(this.jwsVerifier);
+
+        } catch (ParseException | JOSEException e) {
+            log.error("JWT", e);
+            throw new UnauthorizedException("JWT");
         }
     }
 
@@ -121,22 +119,26 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public Authentication getAuthentication(AccessToken accessToken) {
-        Claims claims = parseClaims(accessToken);
+        JWTClaimsSet claimsSet = parseClaimsSet(accessToken);
 
         Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
-        if (claims.containsKey(JwtConstants.AUTHORITIES_KEY)) {
+        if (claimsSet.getClaims().containsKey(JwtConstants.AUTHORITIES_KEY)) {
             authorities = Arrays
-                    .stream(claims.get(JwtConstants.AUTHORITIES_KEY).toString().split(Strings.COMMA))
+                    .stream(claimsSet.getClaims().get(JwtConstants.AUTHORITIES_KEY).toString().split(Strings.COMMA))
                     .filter(auth -> !auth.trim().isEmpty())
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         }
-
-        User principal = new User(claims.getSubject(), Strings.EMPTY, authorities);
+        User principal = new User(claimsSet.getSubject(), Strings.EMPTY, authorities);
         return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
 
-    public Claims parseClaims(AccessToken accessToken) {
-        return jwtParser.parseClaimsJws(accessToken.getValue()).getBody();
+    public JWTClaimsSet parseClaimsSet(AccessToken accessToken) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(accessToken.getValue());
+            return signedJWT.getJWTClaimsSet();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
