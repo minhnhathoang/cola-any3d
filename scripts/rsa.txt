@@ -1,0 +1,5 @@
+# Generate a private key
+genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out app.key
+
+# Generate a public key
+openssl rsa -pubout -in app.key -out app.pub

@@ -19,33 +19,11 @@ package org.nhathm.domain.auth.domainservice;
 
 import domain.security.common.AccessToken;
 
-/**
- * 令牌存储接口
- *
- * @author <a href="mailto:shiyindaxiaojie@gmail.com">gyl</a>
- * @since 2.4.13
- */
 public interface JwtTokenStore {
 
-    /**
-     * 存储访问令牌
-     *
-     * @param accessToken 访问令牌
-     */
     void storeAccessToken(AccessToken accessToken);
 
-    /**
-     * 校验访问令牌
-     *
-     * @param accessToken 访问令牌
-     * @return 校验是否通过
-     */
     boolean validateAccessToken(AccessToken accessToken);
 
-    /**
-     * 清除访问令牌
-     *
-     * @param accessToken 访问令牌
-     */
     void removeAccessToken(AccessToken accessToken);
 }

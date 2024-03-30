@@ -9,9 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class InMemoryJwtAutoConfiguration {
 
-    private static final String AUTOWIRED_IN_MEMORY_JWT_TOKEN_STORE = "Autowired InMemoryJwtTokenStore";
-
-
     @ConditionalOnMissingBean
     @Bean
     public JwtTokenStore tokenStore() {

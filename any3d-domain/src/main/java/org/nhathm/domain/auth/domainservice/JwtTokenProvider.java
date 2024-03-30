@@ -75,7 +75,7 @@ public class JwtTokenProvider implements InitializingBean {
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
         try {
-            jwsObject.sign(new RSASSASigner(jwtProperties.getRsaPrivateKey(), true));
+            jwsObject.sign(new RSASSASigner(jwtProperties.getRsaPrivateKey()));
             AccessToken accessToken = AccessToken.builder()
                     .value(jwsObject.serialize())
                     .expiration(expiration)
