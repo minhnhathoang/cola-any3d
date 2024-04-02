@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @SuperBuilder
 @ToString
 @Entity
-@Table(name = "t_user")
+@Table(name = "users")
 public class UserDO {
 
     @Id

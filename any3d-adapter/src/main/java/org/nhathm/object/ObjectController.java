@@ -2,7 +2,7 @@ package org.nhathm.object;
 
 import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
-import org.nhathm.constant.APIConstant;
+import org.nhathm.APIConstant;
 import org.nhathm.object.api.ObjectService;
 import org.nhathm.object.dto.clientobject.PresignedUrlCO;
 import org.nhathm.object.dto.query.ObjectGetPresignedUrlQry;

@@ -6,7 +6,7 @@ import org.nhathm.app.auth.assembler.UserAssembler;
 import org.nhathm.user.database.UserRepository;
 import org.nhathm.user.dataobject.UserDO;
 import org.nhathm.user.dto.clientobject.UserCO;
-import org.nhathm.user.dto.query.UserByIdQry;
+import org.nhathm.user.dto.command.query.UserByIdQry;
 import org.springframework.stereotype.Component;
 
 /**

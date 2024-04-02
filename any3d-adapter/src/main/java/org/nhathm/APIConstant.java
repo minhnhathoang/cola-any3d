@@ -1,4 +1,4 @@
-package org.nhathm.constant;
+package org.nhathm;
 
 import lombok.experimental.UtilityClass;
 

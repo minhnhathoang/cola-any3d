@@ -4,7 +4,7 @@ import com.alibaba.cola.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.user.database.UserRepository;
 import org.nhathm.user.dto.clientobject.UserCO;
-import org.nhathm.user.dto.query.UserListByPageQry;
+import org.nhathm.user.dto.command.query.UserListByPageQry;
 import org.springframework.stereotype.Component;
 
 /**

@@ -1,4 +1,4 @@
-package org.nhathm.user.dto.query;
+package org.nhathm.user.dto.command.query;
 
 import lombok.Builder;
 import lombok.Data;

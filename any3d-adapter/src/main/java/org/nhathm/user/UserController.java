@@ -4,13 +4,13 @@ import com.alibaba.cola.dto.PageResponse;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
-import org.nhathm.constant.APIConstant;
+import org.nhathm.APIConstant;
 import org.nhathm.user.api.UserService;
 import org.nhathm.user.dto.clientobject.UserCO;
 import org.nhathm.user.dto.command.UserDeleteCmd;
 import org.nhathm.user.dto.command.UserUpdateCmd;
-import org.nhathm.user.dto.query.UserByIdQry;
-import org.nhathm.user.dto.query.UserListByPageQry;
+import org.nhathm.user.dto.command.query.UserByIdQry;
+import org.nhathm.user.dto.command.query.UserListByPageQry;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 

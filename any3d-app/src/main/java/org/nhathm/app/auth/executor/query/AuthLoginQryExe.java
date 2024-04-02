@@ -18,13 +18,13 @@ package org.nhathm.app.auth.executor.query;
 
 import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
+import org.nhathm.ErrorCode;
 import org.nhathm.auth.dto.AuthLoginCO;
 import org.nhathm.auth.dto.query.AuthLoginQry;
 import org.nhathm.domain.auth.domainservice.JwtTokenService;
 import org.nhathm.domain.auth.gateway.AuthGateway;
 import org.nhathm.domain.user.entity.User;
 import org.nhathm.domain.user.entity.UserDetails;
-import org.nhathm.dto.data.ErrorCode;
 import org.springframework.stereotype.Component;
 import util.error.ClientAssert;
 

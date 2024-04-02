@@ -1,4 +1,4 @@
-package org.nhathm.user.dto.query;
+package org.nhathm.user.dto.command.query;
 
 import com.alibaba.cola.dto.PageQuery;
 import lombok.Builder;

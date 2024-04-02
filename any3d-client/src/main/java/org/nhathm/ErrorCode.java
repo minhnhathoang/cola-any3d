@@ -1,4 +1,4 @@
-package org.nhathm.dto.data;
+package org.nhathm;
 
 import com.alibaba.cola.exception.BizException;
 
