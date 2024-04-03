@@ -1,7 +1,9 @@
 package org.nhathm.app.project.executor.command;
 
+import com.alibaba.cola.domain.DomainFactory;
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;
+import org.nhathm.domain.project.entity.Project;
 import org.nhathm.domain.project.gateway.ProjectGateway;
 import org.nhathm.project.dto.command.ProjectCreateCmd;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,9 @@ public class ProjectCreateCmdExe {
     private final ProjectGateway projectGateway;
 
     public Response execute(ProjectCreateCmd cmd) {
-        return null;
+        Project project = DomainFactory.create(Project.class);
+        project.setName(cmd.getName());
+        projectGateway.createProject(project);
+        return Response.buildSuccess();
     }
 }

@@ -2,6 +2,7 @@ package org.nhathm.config.filter;
 
 import domain.security.common.AccessToken;
 import domain.security.common.JwtConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +24,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
+@Slf4j
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private static final String TOKEN_IS_REQUIRED = "Token is required";
@@ -43,6 +45,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                     @NotNull FilterChain chain) throws IOException, ServletException {
+        log.info("doFilterInternal");
         try {
             if (!isAnonymousUrls(request)) {
                 AccessToken accessToken = resolveToken(request);
@@ -61,6 +64,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
             chain.doFilter(request, response);
         } catch (UnauthorizedException e) {
+            log.error("SC_UNAUTHORIZED" + e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }
     }

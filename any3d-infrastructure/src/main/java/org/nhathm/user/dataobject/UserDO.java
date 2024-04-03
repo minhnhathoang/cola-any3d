@@ -21,9 +21,11 @@ import javax.persistence.Table;
 public class UserDO {
 
     @Id
+    private String id;
+
+    private String email;
+
     private String username;
 
     private String hashedPassword;
-
-    private Long userInfoId;
 }

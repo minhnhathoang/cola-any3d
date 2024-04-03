@@ -30,7 +30,7 @@ spring:
         key: classpath:app.key
       public:
         key: classpath:app.pub
-      tokenValidityInSeconds: 1800 # 30 minutes
+      tokenValidityInSeconds: 180000 # 30 minutes
       tokenValidityInSecondsForRememberMe: 2592000 # 30 days
       anonymousUrls:
         - /api/auth/login
@@ -73,3 +73,8 @@ minio:
   username: minioadmin
   password: minioadmin
 
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

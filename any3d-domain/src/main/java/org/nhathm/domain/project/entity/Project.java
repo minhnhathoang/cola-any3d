@@ -1,6 +1,7 @@
 package org.nhathm.domain.project.entity;
 
 import com.alibaba.cola.domain.Entity;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.nhathm.domain.user.entity.User;
@@ -8,6 +9,7 @@ import org.nhathm.domain.user.entity.User;
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
+@Data
 @Entity
 public class Project {
 
