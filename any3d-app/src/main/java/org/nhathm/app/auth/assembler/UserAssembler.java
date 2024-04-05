@@ -3,8 +3,8 @@ package org.nhathm.app.auth.assembler;
 import domain.DTOAssembler;
 import org.mapstruct.Mapper;
 import org.nhathm.auth.dto.command.AuthRegisterCmd;
+import org.nhathm.domain.user.dataobject.UserDO;
 import org.nhathm.domain.user.entity.User;
-import org.nhathm.user.dataobject.UserDO;
 import org.nhathm.user.dto.clientobject.UserCO;
 
 /**

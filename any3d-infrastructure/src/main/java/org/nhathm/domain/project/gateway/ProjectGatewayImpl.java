@@ -1,9 +1,8 @@
-package org.nhathm.project.gateway;
+package org.nhathm.domain.project.gateway;
 
 import lombok.RequiredArgsConstructor;
+import org.nhathm.domain.project.database.ProjectConvertor;
 import org.nhathm.domain.project.entity.Project;
-import org.nhathm.domain.project.gateway.ProjectGateway;
-import org.nhathm.project.database.ProjectConvertor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

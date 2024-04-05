@@ -1,4 +1,4 @@
-package org.nhathm.project.dataobject;
+package org.nhathm.domain.project.dataobject;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

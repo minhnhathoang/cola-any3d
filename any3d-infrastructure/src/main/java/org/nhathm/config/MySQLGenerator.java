@@ -28,23 +28,28 @@ public class MySQLGenerator {
     @Bean
     public void autoGenerate() {
         log.info("Start auto generate mybatis-plus code");
-
         FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> builder.author("nhathm")
-                        .outputDir("D://mybatis-plus")
-                        .commentDate("yyyy-MM-dd"))
+                        .outputDir("any3d-infrastructure")
+                        .commentDate("yyyy-MM-dd")
+                )
+                .packageConfig(builder -> builder
+                                .parent("auto-generated")
+//                        .pathInfo(Collections.singletonMap(OutputFile.xml, "any3d-infrastructure\\src\\main\\resources\\mapper"))
+                )
                 .strategyConfig(builder -> builder
+                        // entity builder
                         .entityBuilder()
                         .enableLombok()
                         .naming(NamingStrategy.underline_to_camel)
                         .columnNaming(NamingStrategy.underline_to_camel)
-                        .formatFileName("%sDO")
-                        .controllerBuilder()
-                        .formatFileName("%sController")
+                        // service builder
                         .serviceBuilder()
-                        .formatServiceFileName("%sService")
-                        .formatServiceImplFileName("%sServiceImpl")
-                        .serviceBuilder()
+                        .formatServiceFileName("%sGateway")
+                        .formatServiceImplFileName("%sGatewayImpl")
+                        // mapper builder
+                        .mapperBuilder()
+                        .formatXmlFileName("%sMapper")
                 )
                 .templateEngine(new FreemarkerTemplateEngine())
                 .execute();

@@ -1,10 +1,9 @@
-package org.nhathm.user.gateway;
+package org.nhathm.domain.user.gateway;
 
 import lombok.RequiredArgsConstructor;
+import org.nhathm.domain.user.database.UserConvertor;
 import org.nhathm.domain.user.entity.User;
 import org.nhathm.domain.user.entity.UserDetails;
-import org.nhathm.domain.user.gateway.UserGateway;
-import org.nhathm.user.database.UserConvertor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

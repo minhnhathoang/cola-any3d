@@ -1,13 +1,13 @@
-package org.nhathm.user.database;
+package org.nhathm.domain.user.database;
 
 import domain.EntityConvertor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.nhathm.domain.user.dataobject.UserDO;
 import org.nhathm.domain.user.entity.User;
 import org.nhathm.domain.user.entity.UserDetails;
-import org.nhathm.user.dataobject.UserDO;
 
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,

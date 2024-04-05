@@ -1,11 +1,11 @@
-package org.nhathm.project.database;
+package org.nhathm.domain.project.database;
 
 import domain.EntityConvertor;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.nhathm.domain.project.dataobject.ProjectDO;
 import org.nhathm.domain.project.entity.Project;
-import org.nhathm.project.dataobject.ProjectDO;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>

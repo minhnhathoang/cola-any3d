@@ -2,10 +2,10 @@ package org.nhathm.auth.gateway;
 
 import lombok.RequiredArgsConstructor;
 import org.nhathm.domain.auth.gateway.AuthGateway;
+import org.nhathm.domain.user.database.UserConvertor;
+import org.nhathm.domain.user.database.UserMapper;
+import org.nhathm.domain.user.dataobject.UserDO;
 import org.nhathm.domain.user.entity.User;
-import org.nhathm.user.database.UserConvertor;
-import org.nhathm.user.database.UserMapper;
-import org.nhathm.user.dataobject.UserDO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

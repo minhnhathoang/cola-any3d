@@ -1,4 +1,4 @@
-package org.nhathm.user.dataobject;
+package org.nhathm.domain.user.dataobject;
 
 import lombok.Data;
 
