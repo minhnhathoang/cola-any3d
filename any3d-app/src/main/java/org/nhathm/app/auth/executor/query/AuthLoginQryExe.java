@@ -17,6 +17,7 @@
 package org.nhathm.app.auth.executor.query;
 
 import com.alibaba.cola.dto.SingleResponse;
+import domain.security.common.AccessToken;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.ErrorCode;
 import org.nhathm.auth.dto.AuthLoginCO;
@@ -39,14 +40,15 @@ public class AuthLoginQryExe {
     public SingleResponse<AuthLoginCO> execute(AuthLoginQry qry) {
         User user = authGateway.login(qry.getUsername(), qry.getPassword());
         ClientAssert.notNull(user, ErrorCode.B_AUTH_Unauthorized.toBizException());
+
+        AccessToken accessToken = jwtTokenService.authenticate(UserDetails.builder()
+                .username(user.getUsername())
+                .password(qry.getPassword())
+                .build(), null);
+
         return SingleResponse.of(AuthLoginCO.builder()
                 .username(user.getUsername())
-                .accessToken(
-                        jwtTokenService.authenticate(UserDetails.builder()
-                                .username(user.getUsername())
-                                .password(qry.getPassword())
-                                .build(), null)
-                )
+                .accessToken(accessToken)
                 .build());
     }
 }

@@ -1,11 +1,13 @@
 package org.nhathm.user.dataobject;
 
-import lombok.*;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
@@ -13,19 +15,19 @@ import javax.persistence.Table;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @SuperBuilder
-@ToString
-@Entity
-@Table(name = "users")
+@TableName("users")
 public class UserDO {
 
-    @Id
+    @TableId("id")
     private String id;
 
+    @TableField("email")
     private String email;
 
+    @TableField("username")
     private String username;
 
+    @TableField("hashed_password")
     private String hashedPassword;
 }

@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.nhathm.domain.auth.gateway.AuthGateway;
 import org.nhathm.domain.user.entity.User;
 import org.nhathm.user.database.UserConvertor;
-import org.nhathm.user.database.UserRepository;
+import org.nhathm.user.database.UserMapper;
 import org.nhathm.user.dataobject.UserDO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
@@ -18,7 +16,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthGatewayImpl implements AuthGateway {
 
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
+
+    private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -26,8 +26,8 @@ public class AuthGatewayImpl implements AuthGateway {
 
     @Override
     public User login(String username, String password) {
-        Optional<UserDO> userDO = userRepository.findById(username)
-                .filter(DO -> passwordEncoder.matches(password, DO.getHashedPassword()));
-        return userConvertor.toEntity(userDO.orElse(null));
+        UserDO userDO = userMapper.selectByUsername(username);
+        boolean isMatch = passwordEncoder.matches(password, userDO.getHashedPassword());
+        return isMatch ? userConvertor.toEntity(userDO) : null;
     }
 }

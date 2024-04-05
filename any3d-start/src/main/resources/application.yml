@@ -23,6 +23,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
   security:
     jwt:
       header: Authorization
@@ -74,7 +78,17 @@ minio:
   password: minioadmin
 
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    auto-mapping-behavior: full
+    call-setters-on-nulls: true
+    use-column-label: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      table-prefix: t_
+

@@ -1,4 +1,4 @@
-package org.nhathm.repository;
+package org.infrastructure.repository;
 
 
 public class CustomerMapperTest {
