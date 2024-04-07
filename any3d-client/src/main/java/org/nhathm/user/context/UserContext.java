@@ -8,9 +8,4 @@ import lombok.Value;
 @Value
 public class UserContext {
 
-    String userId;
-
-    String username;
-
-    String email;
 }

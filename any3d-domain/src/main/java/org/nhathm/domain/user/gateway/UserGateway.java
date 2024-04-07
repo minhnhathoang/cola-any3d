@@ -5,9 +5,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserGateway extends UserDetailsService {
 
+    User loadUserByUsername(String username);
+
     boolean existsByUsername(String username);
 
-    void create(User user);
+    void createUser(User user);
 
     void update(User user);
 }

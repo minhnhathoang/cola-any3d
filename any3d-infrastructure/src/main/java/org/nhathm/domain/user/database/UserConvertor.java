@@ -7,15 +7,11 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.nhathm.domain.user.dataobject.UserDO;
 import org.nhathm.domain.user.entity.User;
-import org.nhathm.domain.user.entity.UserDetails;
 
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserConvertor extends EntityConvertor<User, UserDO> {
-
-    @Mapping(source = "hashedPassword", target = "password")
-    UserDetails toUserDetails(UserDO userDO);
 
     @Mapping(target = "hashedPassword", source = "password")
     UserDO toDataObject(User user);

@@ -5,7 +5,7 @@ import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
 import org.nhathm.user.dto.clientobject.UserCO;
 import org.nhathm.user.dto.command.UserDeleteCmd;
-import org.nhathm.user.dto.command.UserUpdateCmd;
+import org.nhathm.user.dto.command.UserProfileUpdateCmd;
 import org.nhathm.user.dto.command.query.UserByIdQry;
 import org.nhathm.user.dto.command.query.UserListByPageQry;
 
@@ -14,7 +14,7 @@ import org.nhathm.user.dto.command.query.UserListByPageQry;
  */
 public interface UserService {
 
-    Response updateUser(UserUpdateCmd cmd);
+    Response updateUser(UserProfileUpdateCmd cmd);
 
     Response deleteUser(UserDeleteCmd cmd);
 

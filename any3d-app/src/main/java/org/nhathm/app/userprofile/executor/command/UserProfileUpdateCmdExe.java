@@ -1,8 +1,8 @@
-package org.nhathm.app.user.executor.command;
+package org.nhathm.app.userprofile.executor.command;
 
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;
-import org.nhathm.domain.user.gateway.UserGateway;
+import org.nhathm.domain.userprofile.gateway.UserProfileGateway;
 import org.nhathm.user.dto.command.UserProfileUpdateCmd;
 import org.springframework.stereotype.Component;
 
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
  */
 @RequiredArgsConstructor
 @Component
-public class UserUpdateCmdExe {
+public class UserProfileUpdateCmdExe {
 
-    private final UserGateway userGateway;
+    private final UserProfileGateway userProfileGateway;
 
     public Response execute(UserProfileUpdateCmd cmd) {
         return null;

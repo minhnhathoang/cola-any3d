@@ -1,5 +1,6 @@
 package org.nhathm.config.filter;
 
+import com.alibaba.fastjson.JSON;
 import domain.security.common.AccessToken;
 import domain.security.common.JwtConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +62,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
                 Authentication authentication = this.jwtTokenProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("doFilterInternal: authentication: " + JSON.toJSONString(authentication));
             }
             chain.doFilter(request, response);
         } catch (UnauthorizedException e) {

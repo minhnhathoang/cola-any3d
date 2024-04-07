@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -40,14 +41,18 @@ import java.security.interfaces.RSAPublicKey;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @Slf4j
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationProvider customAuthenticationProvider;
+
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+
     @Value("${spring.security.jwt.public.key}")
     RSAPublicKey publicKey;
+
     @Value("${spring.security.jwt.private.key}")
     RSAPrivateKey privateKey;
 

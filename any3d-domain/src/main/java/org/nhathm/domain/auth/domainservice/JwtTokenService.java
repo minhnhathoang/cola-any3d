@@ -19,7 +19,7 @@ package org.nhathm.domain.auth.domainservice;
 import com.google.common.collect.Maps;
 import domain.security.common.AccessToken;
 import lombok.RequiredArgsConstructor;
-import org.nhathm.domain.user.entity.UserDetails;
+import org.nhathm.domain.user.entity.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,10 +41,9 @@ public class JwtTokenService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AccessToken authenticate(UserDetails user, Map<String, Object> claims) {
+    public AccessToken authenticate(User user, Map<String, Object> claims) {
         try {
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+            var authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             Authentication authentication = this.authManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             if (authentication.getAuthorities() != null) {

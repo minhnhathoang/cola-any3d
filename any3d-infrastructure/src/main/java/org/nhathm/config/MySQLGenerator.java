@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -25,7 +24,7 @@ public class MySQLGenerator {
     private String password;
 
 
-    @Bean
+//    @Bean
     public void autoGenerate() {
         log.info("Start auto generate mybatis-plus code");
         FastAutoGenerator.create(url, username, password)
@@ -41,6 +40,7 @@ public class MySQLGenerator {
                         // entity builder
                         .entityBuilder()
                         .enableLombok()
+                        .formatFileName("%sDO")
                         .naming(NamingStrategy.underline_to_camel)
                         .columnNaming(NamingStrategy.underline_to_camel)
                         // service builder

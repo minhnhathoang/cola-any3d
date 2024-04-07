@@ -1,12 +1,10 @@
-package org.nhathm.domain.project.dataobject;
-
+package org.nhathm.domain.userprofile.dataobject;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -18,20 +16,18 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@TableName("project")
-public class ProjectDO implements Serializable {
+@TableName("user_profile")
+public class UserProfileDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private Long id;
 
     private Long userId;
 
     private String name;
 
-    private String metadata;
+    private String avatar;
 
-    private LocalDateTime createdAt;
+    private String address;
 
-    private LocalDateTime lastModifiedAt;
+    private String phone;
 }

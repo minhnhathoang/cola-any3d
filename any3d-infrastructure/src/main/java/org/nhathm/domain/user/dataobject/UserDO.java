@@ -1,33 +1,38 @@
 package org.nhathm.domain.user.dataobject;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
+ * <p>
+ *
+ * </p>
+ *
+ * @author nhathm
+ * @since 2024-04-06
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@SuperBuilder
-@TableName("users")
-public class UserDO {
+@TableName("user")
+public class UserDO implements Serializable {
 
-    @TableId("id")
-    private String id;
+    private static final long serialVersionUID = 1L;
 
-    @TableField("email")
-    private String email;
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private Long id;
 
-    @TableField("username")
     private String username;
 
-    @TableField("hashed_password")
     private String hashedPassword;
+
+    private String email;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime lastModifiedAt;
 }

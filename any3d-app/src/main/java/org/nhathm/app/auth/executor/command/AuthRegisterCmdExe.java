@@ -25,7 +25,7 @@ public class AuthRegisterCmdExe {
         if (userGateway.existsByUsername(user.getUsername())) {
             throw ErrorCode.B_USER_UsernameAlreadyExist.toBizException();
         }
-        userGateway.create(user);
+        userGateway.createUser(user);
         return Response.buildSuccess();
     }
 }

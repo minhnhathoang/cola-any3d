@@ -67,7 +67,7 @@ public class JwtTokenProvider implements InitializingBean {
         JWSHeader header = new JWSHeader(JWSAlgorithm.RS256);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(subject)
-                .issuer("any3d-nhathm")
+                .issuer("any3d")
                 .issueTime(new Date())
                 .claim(JwtConstants.AUTHORITIES_KEY, claims.get(JwtConstants.AUTHORITIES_KEY))
                 .expirationTime(expiration)

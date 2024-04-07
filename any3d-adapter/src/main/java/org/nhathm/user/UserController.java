@@ -8,7 +8,7 @@ import org.nhathm.APIConstant;
 import org.nhathm.user.api.UserService;
 import org.nhathm.user.dto.clientobject.UserCO;
 import org.nhathm.user.dto.command.UserDeleteCmd;
-import org.nhathm.user.dto.command.UserUpdateCmd;
+import org.nhathm.user.dto.command.UserProfileUpdateCmd;
 import org.nhathm.user.dto.command.query.UserByIdQry;
 import org.nhathm.user.dto.command.query.UserListByPageQry;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +27,7 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/{id}")
-    public Response modifyUser(@PathVariable String id, @Valid @RequestBody UserUpdateCmd cmd) {
+    public Response modifyUser(@PathVariable String id, @Valid @RequestBody UserProfileUpdateCmd cmd) {
         cmd.setUserId(id);
         return userService.updateUser(cmd);
     }
