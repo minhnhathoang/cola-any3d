@@ -24,7 +24,7 @@ public class AccessToken {
 
     private Date expiration;
 
-    private String tokenType = JwtConstants.BEARER_TYPE.toLowerCase();
+    private String tokenType = JwtConstants.BEARER_TYPE;
 
     private Set<String> scope;
 

@@ -17,7 +17,12 @@ public class ObjectStorageConsumer implements MessageQueueConsumer {
 
     @Override
     public void consume(List<Message> messages, Acknowledgement ack) {
-        log.info("Consume messages: {}", messages);
+        log.info("Consume {} messages: {}", messages.size(), messages);
+
+        for (Message message : messages) {
+            log.info("Consume message: {}", message);
+        }
+
         ack.acknowledge();
     }
 }

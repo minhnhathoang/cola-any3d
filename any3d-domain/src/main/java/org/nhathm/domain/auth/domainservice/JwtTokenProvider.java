@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+import org.nhathm.domain.user.entity.User;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import util.Strings;
 
 import java.text.ParseException;
@@ -49,10 +49,14 @@ public class JwtTokenProvider implements InitializingBean {
 
     public AccessToken createToken(Authentication authentication, boolean rememberMe, Map<String, Object> claims) {
         if (CollectionUtils.isNotEmpty(authentication.getAuthorities())) {
-            String authorities = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority).collect(Collectors.joining(Strings.COMMA));
+            String authorities = authentication.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.joining(Strings.COMMA));
             claims.put(JwtConstants.AUTHORITIES_KEY, authorities);
         }
+        User user = (User) authentication.getPrincipal();
+        claims.put(JwtConstants.USER_ID_KEY, user.getId());
         return createToken(authentication.getName(), rememberMe, claims);
     }
 
@@ -70,6 +74,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .issuer("any3d")
                 .issueTime(new Date())
                 .claim(JwtConstants.AUTHORITIES_KEY, claims.get(JwtConstants.AUTHORITIES_KEY))
+                .claim(JwtConstants.USER_ID_KEY, claims.get(JwtConstants.USER_ID_KEY))
                 .expirationTime(expiration)
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -113,7 +118,7 @@ public class JwtTokenProvider implements InitializingBean {
         }
     }
 
-    public Authentication getAuthentication(AccessToken accessToken) {
+    public Authentication getAuthentication(AccessToken accessToken) throws ParseException {
         JWTClaimsSet claimsSet = parseClaimsSet(accessToken);
         Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
         if (claimsSet.getClaims().containsKey(JwtConstants.AUTHORITIES_KEY)) {
@@ -123,7 +128,11 @@ public class JwtTokenProvider implements InitializingBean {
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         }
-        User principal = new User(claimsSet.getSubject(), Strings.EMPTY, authorities);
+        User principal = User.builder()
+                .id(claimsSet.getLongClaim(JwtConstants.USER_ID_KEY))
+                .username(claimsSet.getSubject())
+                .authorities(authorities)
+                .build();
         return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
 

@@ -2,6 +2,7 @@ package org.nhathm.app.userprofile.service;
 
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;
+import org.nhathm.app.userprofile.executor.command.UserProfileUpdateCmdExe;
 import org.nhathm.user.api.UserProfileService;
 import org.nhathm.user.dto.command.UserProfileUpdateCmd;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserProfileServiceImpl implements UserProfileService {
 
+    private final UserProfileUpdateCmdExe userProfileUpdateCmdExe;
 
     @Override
     public Response updateUserProfile(UserProfileUpdateCmd cmd) {
-        return null;
+        return userProfileUpdateCmdExe.execute(cmd);
     }
 }

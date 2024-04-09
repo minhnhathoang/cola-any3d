@@ -47,27 +47,37 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                     @NotNull FilterChain chain) throws IOException, ServletException {
         log.info("doFilterInternal");
+        log.info("doFilterInternal: request: " + request.getHeader("login"));
         try {
             if (!isAnonymousUrls(request)) {
+                log.info("doFilterInternal: not anonymous urls");
                 AccessToken accessToken = resolveToken(request);
                 if (accessToken == null) {
+                    log.info("doFilterInternal: accessToken is null");
                     throw new UnauthorizedException(TOKEN_IS_REQUIRED);
                 }
                 try {
                     this.jwtTokenProvider.validateToken(accessToken);
                 } catch (Exception e) {
+                    log.info("doFilterInternal: validateToken error: " + e.getMessage());
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().write(e.getMessage());
                     return;
                 }
+                log.info(jwtTokenProvider.getJwtProperties().getAnonymousUrls().toString());
+                log.info(request.getRequestURI());
                 Authentication authentication = this.jwtTokenProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info("doFilterInternal: authentication: " + JSON.toJSONString(authentication));
             }
             chain.doFilter(request, response);
+            log.info("doFilterInternal: end");
         } catch (UnauthorizedException e) {
             log.error("SC_UNAUTHORIZED" + e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+        } catch (Exception e) {
+            log.error("SC_INTERNAL_SERVER_ERROR", e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 

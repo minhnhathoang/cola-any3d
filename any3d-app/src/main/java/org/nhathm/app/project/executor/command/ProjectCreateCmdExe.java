@@ -1,8 +1,9 @@
 package org.nhathm.app.project.executor.command;
 
-import com.alibaba.cola.domain.DomainFactory;
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;
+import org.nhathm.ErrorCode;
+import org.nhathm.app.project.assembler.ProjectAssembler;
 import org.nhathm.domain.project.entity.Project;
 import org.nhathm.domain.project.gateway.ProjectGateway;
 import org.nhathm.project.dto.command.ProjectCreateCmd;
@@ -17,9 +18,14 @@ public class ProjectCreateCmdExe {
 
     private final ProjectGateway projectGateway;
 
+    private final ProjectAssembler projectAssembler;
+
     public Response execute(ProjectCreateCmd cmd) {
-        Project project = DomainFactory.create(Project.class);
-        project.setName(cmd.getName());
+        if (projectGateway.isExistsByUserIdAndName(cmd.getUserId(), cmd.getName())) {
+            throw ErrorCode.B_PROJECT_ProjectAlreadyExist.toBizException();
+        }
+
+        Project project = projectAssembler.toEntity(cmd);
         projectGateway.createProject(project);
         return Response.buildSuccess();
     }

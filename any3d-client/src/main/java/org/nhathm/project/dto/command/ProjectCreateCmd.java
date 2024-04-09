@@ -8,5 +8,7 @@ import lombok.Data;
 @Data
 public class ProjectCreateCmd {
 
+    private Long userId;
+
     private String name;
 }

@@ -1,0 +1,7 @@
+package org.nhathm.app.project.executor.query;
+
+/**
+ * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
+ */
+public class ProjectListQry {
+}

@@ -1,14 +1,25 @@
 package org.nhathm.domain.project.entity;
 
-import com.alibaba.cola.domain.Entity;
+import lombok.Data;
+import org.nhathm.domain.objectstorage.entity.HologramType;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
-@Entity
+@Data
 public class Hologram {
 
-    private String id;
+    private Long id;
 
-    private Project project;
+    private Long contentId;
+
+    private Long userId;
+
+    private String fileName;
+
+    private String url;
+
+    private Double size;
+
+    private HologramType type;
 }

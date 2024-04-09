@@ -4,8 +4,13 @@ import com.alibaba.cola.exception.BizException;
 
 public enum ErrorCode {
     B_AUTH_Unauthorized("AUTH-401", "Unauthorized"),
+
     B_USER_UsernameAlreadyExist("USER-409", "Username already exists"),
-    B_USER_UserNotFound("USER-404", "User not found");
+    B_USER_UserNotFound("USER-404", "User not found"),
+
+    B_PROJECT_ProjectAlreadyExist("PROJECT-409", "Project already exists"),
+    B_PROJECT_ProjectNotFound("PROJECT-404", "Project not found"),
+    ;
 
     private final String errCode;
     private final String errDesc;

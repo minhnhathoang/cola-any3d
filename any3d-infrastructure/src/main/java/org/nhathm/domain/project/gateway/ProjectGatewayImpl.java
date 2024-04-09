@@ -1,35 +1,42 @@
 package org.nhathm.domain.project.gateway;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.domain.project.database.ProjectConvertor;
+import org.nhathm.domain.project.database.ProjectMapper;
+import org.nhathm.domain.project.dataobject.ProjectDO;
 import org.nhathm.domain.project.entity.Project;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
 @RequiredArgsConstructor
 @Component
-public class ProjectGatewayImpl implements ProjectGateway {
+public class ProjectGatewayImpl
+        extends ServiceImpl<ProjectMapper, ProjectDO> implements ProjectGateway {
 
 
     private final ProjectConvertor projectConvertor;
 
     @Override
-    public Project getById(String id) {
-        return null;
+    public boolean isExistsById(Long id) {
+        return this.lambdaQuery()
+                .eq(ProjectDO::getId, id)
+                .count() > 0;
     }
 
     @Override
-    public List<Project> getProjectList() {
-        return null;
+    public boolean isExistsByUserIdAndName(Long userId, String name) {
+        return this.lambdaQuery()
+                .eq(ProjectDO::getUserId, userId)
+                .eq(ProjectDO::getName, name)
+                .count() > 0;
     }
 
     @Override
     public void createProject(Project project) {
-//        projectRepository.save(projectConvertor.toDataObject(project));
+        this.save(projectConvertor.toDataObject(project));
     }
 
     @Override

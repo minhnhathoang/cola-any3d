@@ -1,6 +1,7 @@
 package org.nhathm.domain.auth.domainservice;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.nhathm.domain.user.entity.User;
 import org.nhathm.domain.user.gateway.UserGateway;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
@@ -27,9 +29,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = String.valueOf(authentication.getCredentials());
         User user = userGateway.loadUserByUsername(username);
-        if (user != null) {
+        if (null != user) {
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
+                return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
             }
         }
         throw new BadCredentialsException("Bad credentials");

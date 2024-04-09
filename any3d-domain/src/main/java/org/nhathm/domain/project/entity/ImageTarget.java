@@ -1,11 +1,19 @@
 package org.nhathm.domain.project.entity;
 
-import com.alibaba.cola.domain.Entity;
+import lombok.Data;
+import org.nhathm.domain.arsdk.ARSdkType;
 
 /**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
+ * @author nhathm
  */
-@Entity
+@Data
 public class ImageTarget {
 
+    private Long id;
+
+    private Long contentId;
+
+    private String fileName;
+
+    private ARSdkType arSdkType = ARSdkType.NONE;
 }

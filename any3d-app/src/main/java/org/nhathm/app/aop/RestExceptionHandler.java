@@ -3,6 +3,7 @@ package org.nhathm.app.aop;
 import com.alibaba.cola.catchlog.ResponseHandlerI;
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.nhathm.domain.auth.domainservice.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @RestControllerAdvice
+@Slf4j
 public class RestExceptionHandler {
 
     private final ResponseHandlerI colaResponseHandler;
@@ -30,6 +32,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> resolveException(Exception ex) {
         Object response = colaResponseHandler.handle(Response.class, "SYS-ERROR-500", "Internal Server Error. " + ex.getMessage());
+        log.error("Internal Server Error.", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
@@ -47,12 +50,14 @@ public class RestExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<?> resolveMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         Object response = colaResponseHandler.handle(Response.class, "REQ-ERROR-405", "Method Not Allowed.");
+        log.error("Method Not Allowed.", ex);
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
 
     @ExceptionHandler(ThirdServiceException.class)
     public ResponseEntity<?> resolveThirdServiceException(ThirdServiceException ex) {
         Object response = colaResponseHandler.handle(Response.class, ex.getErrCode(), ex.getMessage());
+        log.error("Third Service Exception.", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 

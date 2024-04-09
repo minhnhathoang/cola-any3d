@@ -58,7 +58,7 @@ CREATE TABLE hologram
 (
     id         bigint(20)  NOT NULL,
     content_id bigint(20)  NOT NULL,
-    name       varchar(70) NOT NULL,
+    fileName   varchar(70) NOT NULL,
     type       varchar(20) NOT NULL,
 
     PRIMARY KEY (id),

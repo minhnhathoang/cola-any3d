@@ -4,17 +4,15 @@ import com.alibaba.cola.domain.Entity;
 import lombok.Data;
 
 /**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
+ * @author nhathm
  */
 @Data
 @Entity
 public class Content {
 
-    private String id;
+    private Long id;
 
-    private Project project;
+    private Long projectId;
 
-    private Hologram hologram;
-
-    private ImageTarget imageTarget;
+    private String metadata;
 }

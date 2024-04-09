@@ -16,7 +16,6 @@
 
 package org.nhathm.domain.auth.domainservice;
 
-import com.google.common.collect.Maps;
 import domain.security.common.AccessToken;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.domain.user.entity.User;
@@ -27,15 +26,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
 public class JwtTokenService {
-
-    private static final String AUTHENTICATE_BAD_CREDENTIALS = "JWT authenticated failed due to bad credentials：{}";
-
-    private static final String AUTHENTICATE_EXCEPTION = "JWT authenticated failed, caught exception: {}";
 
     private final AuthenticationManager authManager;
 
@@ -48,7 +44,7 @@ public class JwtTokenService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             if (authentication.getAuthorities() != null) {
                 if (claims == null) {
-                    claims = Maps.newHashMap();
+                    claims = new HashMap<>();
                 }
 //                StringBuilder authorities = new StringBuilder();
 //                for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
