@@ -14,11 +14,11 @@ import org.nhathm.user.dto.command.query.UserListByPageQry;
  */
 public interface UserService {
 
+    SingleResponse<UserCO> getCurrentUser();
+
     Response updateUser(UserProfileUpdateCmd cmd);
 
     Response deleteUser(UserDeleteCmd cmd);
-
-    SingleResponse<UserCO> getCurrentUser();
 
     SingleResponse<UserCO> getUserBy(UserByIdQry qry);
 

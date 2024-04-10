@@ -11,7 +11,6 @@ import org.nhathm.user.dto.command.UserDeleteCmd;
 import org.nhathm.user.dto.command.UserProfileUpdateCmd;
 import org.nhathm.user.dto.command.query.UserByIdQry;
 import org.nhathm.user.dto.command.query.UserListByPageQry;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +26,7 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/{id}")
-    public Response modifyUser(@PathVariable String id, @Valid @RequestBody UserProfileUpdateCmd cmd) {
+    public Response updateUser(@PathVariable String id, @Valid @RequestBody UserProfileUpdateCmd cmd) {
         cmd.setUserId(id);
         return userService.updateUser(cmd);
     }
@@ -37,9 +36,9 @@ public class UserController {
         return userService.deleteUser(UserDeleteCmd.builder().userId(id).build());
     }
 
-    @GetMapping("/me/profile")
-    public SingleResponse<Object> getCurrentUser() {
-        return SingleResponse.of(SecurityContextHolder.getContext().getAuthentication());
+    @GetMapping("/me")
+    public SingleResponse<UserCO> getCurrentUser() {
+        return userService.getCurrentUser();
     }
 
     @GetMapping("/{id}")
@@ -48,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping
-    public PageResponse<UserCO> listUserBy(@Valid @ModelAttribute UserListByPageQry qry) {
+    public PageResponse<UserCO> getUserListBy(@Valid @ModelAttribute UserListByPageQry qry) {
         return userService.listUserBy(qry);
     }
 }

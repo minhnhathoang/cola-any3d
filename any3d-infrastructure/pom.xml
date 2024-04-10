@@ -155,5 +155,11 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-messaging -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-messaging</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

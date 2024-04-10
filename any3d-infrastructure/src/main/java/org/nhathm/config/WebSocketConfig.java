@@ -1,8 +1,15 @@
 package org.nhathm.config;
 
+import com.alibaba.cola.exception.SysException;
 import com.alibaba.fastjson.JSON;
+import domain.security.common.AccessToken;
+import domain.security.common.JwtConstants;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
+import org.apache.commons.lang3.StringUtils;
+import org.nhathm.domain.auth.domainservice.JwtProperties;
+import org.nhathm.domain.auth.domainservice.JwtTokenProvider;
+import org.nhathm.domain.auth.domainservice.UnauthorizedException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -14,11 +21,14 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.config.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 
 /**
  * @author nhathm
@@ -26,55 +36,26 @@ import org.springframework.web.socket.config.annotation.*;
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer, WebSocketConfigurer {
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final JwtProperties jwtProperties;
+
+    private final JwtTokenProvider jwtTokenProvider;
+
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:8000");
-    }
-
-    @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(greetingHandler(), "/greeting").setAllowedOrigins("*");
+                .setAllowedOrigins("*");
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("", "/app");
-        registry.enableSimpleBroker("/topic", "");
-    }
-
-    @Bean
-    public WebSocketHandler greetingHandler() {
-        return new WebSocketHandler() {
-            @Override
-            public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-                System.out.println("@ Connected" + JSON.toJSON(session.getPrincipal()));
-            }
-
-            @Override
-            public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-                System.out.println("@ Received message: " + message.getPayload());
-                System.out.println("@ Received message: " + JSON.toJSON(session.getHandshakeHeaders()));
-            }
-
-            @Override
-            public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-                System.out.println("@ Error");
-            }
-
-            @Override
-            public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-                System.out.println("@ Closed");
-            }
-
-            @Override
-            public boolean supportsPartialMessages() {
-                return false;
-            }
-        };
+        registry.enableSimpleBroker("/topic", "/queue");
+        registry.setUserDestinationPrefix("/user");
     }
 
     @Override
@@ -82,42 +63,42 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer, WebSoc
         registration.interceptors(new ChannelInterceptor() {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                log.info("@preSend: {}", message);
-                StompHeaderAccessor accessor =
-                        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-//                    Authentication authentication = accessor.getUser();
+                    String authorizationHeader = accessor.getFirstNativeHeader(jwtProperties.getHeader());
+                    if (StringUtils.isNotBlank(authorizationHeader)
+                            && authorizationHeader.startsWith(JwtConstants.BEARER_PREFIX)) {
+                        AccessToken accessToken = AccessToken.builder().value(authorizationHeader.substring(JwtConstants.BEARER_PREFIX.length())).build();
+                        try {
+                            jwtTokenProvider.validateToken(accessToken);
+                        } catch (Exception e) {
+                            throw new UnauthorizedException("Unauthorized. Invalid token");
+                        }
+                        try {
+                            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                            //
+                            accessor.setUser(authentication);
+                        } catch (ParseException e) {
+                            throw new SysException("Failed to parse token", e);
+                        }
+                    } else {
+                        throw new UnauthorizedException("Unauthorized");
+                    }
                 }
-                log.info("preSend: {}", message);
+                // TODO:
+                log.info("preSend: {}", JSON.toJSONString(message));
                 return message;
-            }
-
-            @Override
-            public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
-                log.info("postSend: {}", message);
-            }
-
-            @Override
-            public void afterSendCompletion(Message<?> message, MessageChannel channel, boolean sent, Exception ex) {
-                log.info("afterSendCompletion: {}", message);
-            }
-
-            @Override
-            public boolean preReceive(MessageChannel channel) {
-                log.info("preReceive: {}", channel);
-                return true;
-            }
-
-            @Override
-            public Message<?> postReceive(Message<?> message, MessageChannel channel) {
-                log.info("postReceive: {}", message);
-                return message;
-            }
-
-            @Override
-            public void afterReceiveCompletion(Message<?> message, MessageChannel channel, Exception ex) {
-                log.info("afterReceiveCompletion: {}", message);
             }
         });
+    }
+
+    private AccessToken resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(jwtTokenProvider.getJwtProperties().getHeader());
+        if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(JwtConstants.BEARER_PREFIX)) {
+            return AccessToken.builder().value(bearerToken.substring(JwtConstants.BEARER_PREFIX.length())).build();
+        }
+        return null;
     }
 }

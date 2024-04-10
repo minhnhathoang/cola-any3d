@@ -26,11 +26,10 @@ public class WebsocketController implements WebSocketHandler {
         return "Hello " + message;
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedRate = 1000)
     @SendTo("/topic/time")
     public void broadcastNews() {
-        template.convertAndSend("/topic/time", "any3d");
-        System.out.println("Broadcasting message: " + "any3d");
+        template.convertAndSendToUser("username1", "/queue/notify", "any3d - 1");
     }
 
     @SendToUser("/")

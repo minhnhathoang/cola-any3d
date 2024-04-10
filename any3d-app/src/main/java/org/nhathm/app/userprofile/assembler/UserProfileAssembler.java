@@ -1,10 +1,9 @@
-package org.nhathm.app.project.assembler;
+package org.nhathm.app.userprofile.assembler;
 
 import domain.COAssembler;
 import org.mapstruct.Mapper;
-import org.nhathm.domain.project.entity.Project;
-import org.nhathm.project.dto.clientobject.ProjectCO;
-import org.nhathm.project.dto.command.ProjectCreateCmd;
+import org.nhathm.domain.userprofile.entity.UserProfile;
+import org.nhathm.user.dto.clientobject.UserProfileCO;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
@@ -12,7 +11,6 @@ import org.nhathm.project.dto.command.ProjectCreateCmd;
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = org.mapstruct.NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
-public interface ProjectAssembler extends COAssembler<ProjectCO, Project> {
+public interface UserProfileAssembler extends COAssembler<UserProfileCO, UserProfile> {
 
-    Project toEntity(ProjectCreateCmd cmd);
 }

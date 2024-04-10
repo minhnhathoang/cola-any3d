@@ -1,6 +1,8 @@
 package org.nhathm.user.api;
 
 import com.alibaba.cola.dto.Response;
+import com.alibaba.cola.dto.SingleResponse;
+import org.nhathm.user.dto.clientobject.UserProfileCO;
 import org.nhathm.user.dto.command.UserProfileUpdateCmd;
 
 /**
@@ -8,6 +10,9 @@ import org.nhathm.user.dto.command.UserProfileUpdateCmd;
  */
 public interface UserProfileService {
 
-    Response updateUserProfile(UserProfileUpdateCmd cmd);
+    SingleResponse<UserProfileCO> getCurrentUserProfile();
 
+    SingleResponse<UserProfileCO> getUserProfile(String userId);
+
+    Response updateUserProfile(UserProfileUpdateCmd cmd);
 }

@@ -1,5 +1,6 @@
 package org.nhathm.domain.userprofile.dataobject;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class UserProfileDO implements Serializable {
     @Serial
     private static final long serialVersionUID = -381841047201887255L;
 
+    @TableId
     private Long userId;
 
     private String name;

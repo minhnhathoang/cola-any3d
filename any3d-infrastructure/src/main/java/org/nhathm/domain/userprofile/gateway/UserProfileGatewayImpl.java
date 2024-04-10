@@ -16,11 +16,18 @@ import org.springframework.stereotype.Component;
 public class UserProfileGatewayImpl
         extends ServiceImpl<UserProfileMapper, UserProfileDO> implements UserProfileGateway {
 
+    private final UserProfileMapper userProfileMapper;
+
     private final UserProfileConvertor profileConvertor;
 
     @Override
     public void updateUserProfile(UserProfile userProfile) {
         this.saveOrUpdate(profileConvertor.toDataObject(userProfile));
+    }
+
+    @Override
+    public UserProfile findByUserId(Long userId) {
+        return profileConvertor.toEntity(userProfileMapper.selectById(userId));
     }
 }
 

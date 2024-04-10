@@ -1,6 +1,6 @@
 package org.nhathm.app.auth.assembler;
 
-import domain.DTOAssembler;
+import domain.COAssembler;
 import org.mapstruct.Mapper;
 import org.nhathm.auth.dto.command.AuthRegisterCmd;
 import org.nhathm.domain.user.dataobject.UserDO;
@@ -13,7 +13,7 @@ import org.nhathm.user.dto.clientobject.UserCO;
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = org.mapstruct.NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
-public interface UserAssembler extends DTOAssembler<UserCO, User> {
+public interface UserAssembler extends COAssembler<UserCO, User> {
 
     UserCO toCO(UserDO dataObject);
 

@@ -6,7 +6,7 @@ import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.app.user.executor.command.UserDeleteCmdExe;
 import org.nhathm.app.user.executor.command.UserUpdateCmdExe;
-import org.nhathm.app.user.executor.query.UserCurrentExe;
+import org.nhathm.app.user.executor.query.UserGetCurrentExe;
 import org.nhathm.app.user.executor.query.UserListByPageQryExe;
 import org.nhathm.user.api.UserService;
 import org.nhathm.user.dto.clientobject.UserCO;
@@ -27,10 +27,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserDeleteCmdExe userDeleteCmdExe;
 
-    private final UserCurrentExe userCurrentExe;
+    private final UserGetCurrentExe userGetCurrentExe;
 
     private final UserListByPageQryExe userListByPageQryExe;
 
+    @Override
+    public SingleResponse<UserCO> getCurrentUser() {
+        return userGetCurrentExe.execute();
+    }
 
     @Override
     public Response updateUser(UserProfileUpdateCmd cmd) {
@@ -40,11 +44,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Response deleteUser(UserDeleteCmd cmd) {
         return null;
-    }
-
-    @Override
-    public SingleResponse<UserCO> getCurrentUser() {
-        return userCurrentExe.execute();
     }
 
     @Override
