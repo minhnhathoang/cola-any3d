@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nhathm.config.MinioConfig;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author nhathm
@@ -73,6 +74,26 @@ public class ObjectStorageGatewayImpl implements ObjectStorageGateway {
             return minioClient.getPresignedObjectUrl(args);
         } catch (Exception e) {
             throw new SysException("Error when getting pre-signed get url", e);
+        }
+    }
+
+    @Override
+    public String uploadObject(String bucketName, String objectName, String filePath) {
+        return null;
+    }
+
+    @Override
+    public void uploadMultiPartObject(String bucketName, String objectName, MultipartFile file) {
+        try {
+            PutObjectArgs args = PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .stream(file.getInputStream(), file.getSize(), -1)
+                    .contentType(file.getContentType())
+                    .build();
+            minioClient.putObject(args);
+        } catch (Exception e) {
+            throw new SysException("Error when uploading multi-part object", e);
         }
     }
 }

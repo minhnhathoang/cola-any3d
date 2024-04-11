@@ -4,6 +4,7 @@ import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.errors.MinioException;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +14,16 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
  */
+@Data
 @Configuration
 public class MinioConfig {
+
+    public static final String PUBLIC_BUCKET_NAME = "pub";
 
     public static final String COMMON_BUCKET_NAME = "common";
 
     public static final int PRESIGNED_URL_EXPIRY = 60 * 60 * 24;
+
 
     @Autowired
     private SimpMessagingTemplate template;
@@ -44,6 +49,12 @@ public class MinioConfig {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(COMMON_BUCKET_NAME).build());
             }
 
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(PUBLIC_BUCKET_NAME).build())) {
+                minioClient.makeBucket(MakeBucketArgs.builder()
+                        .bucket(PUBLIC_BUCKET_NAME).build());
+            }
+
+
             template.convertAndSend("/topic/times", "any3d");
 
 
@@ -58,5 +69,9 @@ public class MinioConfig {
         } catch (MinioException e) {
             throw new Exception("Error occurred: " + e);
         }
+    }
+
+    public String getPublicUrl(String objectName) {
+        return minioUrl + "/" + PUBLIC_BUCKET_NAME + "/" + objectName;
     }
 }

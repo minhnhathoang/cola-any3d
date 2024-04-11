@@ -15,8 +15,8 @@ CREATE TABLE user
 
 CREATE TABLE user_profile
 (
-    user_id bigint(20)  NOT NULL,
-    name    varchar(70) NOT NULL,
+    user_id bigint(20) NOT NULL,
+    name    varchar(70)  DEFAULT NULL,
     avatar  varchar(100) DEFAULT NULL,
     address varchar(100) DEFAULT NULL,
     phone   varchar(20)  DEFAULT NULL,

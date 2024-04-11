@@ -26,7 +26,7 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/{id}")
-    public Response updateUser(@PathVariable String id, @Valid @RequestBody UserProfileUpdateCmd cmd) {
+    public Response updateUser(@PathVariable Long id, @Valid @RequestBody UserProfileUpdateCmd cmd) {
         cmd.setUserId(id);
         return userService.updateUser(cmd);
     }

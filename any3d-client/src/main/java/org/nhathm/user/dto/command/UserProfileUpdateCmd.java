@@ -1,8 +1,7 @@
 package org.nhathm.user.dto.command;
 
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
@@ -10,8 +9,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class UserProfileUpdateCmd {
 
-    @NotEmpty
-    private String userId;
+    private Long userId;
 
     private String name;
 
@@ -20,4 +18,6 @@ public class UserProfileUpdateCmd {
     private String address;
 
     private String phone;
+
+    private MultipartFile avatarFile;
 }

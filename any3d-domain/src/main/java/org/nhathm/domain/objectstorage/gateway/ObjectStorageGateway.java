@@ -1,5 +1,7 @@
 package org.nhathm.domain.objectstorage.gateway;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * @author nhathm
  */
@@ -14,4 +16,8 @@ public interface ObjectStorageGateway {
     String getPresignedPutUrl(String bucketName, String objectName);
 
     String getPresignedGetUrl(String bucketName, String objectName);
+
+    String uploadObject(String bucketName, String objectName, String filePath);
+
+    void uploadMultiPartObject(String bucketName, String objectName, MultipartFile file);
 }
