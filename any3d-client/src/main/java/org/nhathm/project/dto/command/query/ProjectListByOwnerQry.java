@@ -8,6 +8,6 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class ProjectListQry {
-
+public class ProjectListByOwnerQry {
+    private Long ownerId;
 }

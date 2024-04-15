@@ -25,4 +25,6 @@ public class AppConfig {
     public OkHttpClient httpClient() {
         return new OkHttpClient();
     }
+
+
 }

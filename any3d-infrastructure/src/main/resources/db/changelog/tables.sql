@@ -28,15 +28,16 @@ CREATE TABLE user_profile
 
 CREATE TABLE project
 (
-    id               bigint(20)  NOT NULL,
-    user_id          bigint(20)  NOT NULL,
-    name             varchar(70) NOT NULL,
+    id               bigint(20)   NOT NULL,
+    owner_id         bigint(20)   NOT NULL,
+    name             varchar(70)  NOT NULL,
+    description      varchar(255) NOT NULL,
     metadata         json      DEFAULT NULL,
     created_at       timestamp DEFAULT current_timestamp(),
     last_modified_at timestamp DEFAULT NULL,
 
     PRIMARY KEY (id),
-    CONSTRAINT project_FK FOREIGN KEY (user_id) REFERENCES user (id)
+    CONSTRAINT project_FK FOREIGN KEY (owner_id) REFERENCES user (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 

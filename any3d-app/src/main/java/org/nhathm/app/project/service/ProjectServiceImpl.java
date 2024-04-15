@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.nhathm.app.project.executor.command.ContentCreatePresignedUploadUrlCmdExe;
 import org.nhathm.app.project.executor.command.ProjectCreateCmdExe;
 import org.nhathm.app.project.executor.command.ProjectDeleteCmdExe;
+import org.nhathm.app.project.executor.query.ProjectListByOwnerQryExe;
 import org.nhathm.content.dto.clientobject.ContentCO;
 import org.nhathm.content.dto.command.query.ContentListByPageQry;
 import org.nhathm.project.api.ContentCreatePresignedUploadUrlCO;
@@ -17,7 +18,7 @@ import org.nhathm.project.dto.clientobject.ProjectCO;
 import org.nhathm.project.dto.command.ContentCreatePresignedUploadUrlCmd;
 import org.nhathm.project.dto.command.ProjectCreateCmd;
 import org.nhathm.project.dto.command.ProjectDeleteCmd;
-import org.nhathm.project.dto.command.query.ProjectListQry;
+import org.nhathm.project.dto.command.query.ProjectListByOwnerQry;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,6 +32,8 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectCreateCmdExe projectCreateCmdExe;
 
     ProjectDeleteCmdExe projectDeleteCmdExe;
+
+    ProjectListByOwnerQryExe projectListByOwnerQryExe;
 
     ContentCreatePresignedUploadUrlCmdExe contentCreatePresignedUploadUrlCmdExe;
 
@@ -51,8 +54,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public MultiResponse<ProjectCO> getProjectList(ProjectListQry qry) {
-        return null;
+    public MultiResponse<ProjectCO> getProjectListByOwnerId(ProjectListByOwnerQry qry) {
+        return projectListByOwnerQryExe.execute(qry);
     }
 
     @Override

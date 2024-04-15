@@ -12,7 +12,7 @@ import org.nhathm.project.dto.clientobject.ProjectCO;
 import org.nhathm.project.dto.command.ContentCreatePresignedUploadUrlCmd;
 import org.nhathm.project.dto.command.ProjectCreateCmd;
 import org.nhathm.project.dto.command.ProjectDeleteCmd;
-import org.nhathm.project.dto.command.query.ProjectListQry;
+import org.nhathm.project.dto.command.query.ProjectListByOwnerQry;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -28,13 +28,16 @@ public class ProjectController {
 
     @PostMapping
     public Response createProject(@RequestBody ProjectCreateCmd cmd) {
-        cmd.setUserId(SpringSecurityUtils.getUserId());
+        cmd.setOwnerId(SpringSecurityUtils.getUserId());
         return projectService.createProject(cmd);
     }
 
     @GetMapping
-    public MultiResponse<ProjectCO> getProjectList() {
-        return projectService.getProjectList(ProjectListQry.builder().build());
+    public MultiResponse<ProjectCO> getProjectListByOwnerId() {
+        return projectService.getProjectListByOwnerId(ProjectListByOwnerQry
+                .builder()
+                .ownerId(SpringSecurityUtils.getUserId())
+                .build());
     }
 
     @DeleteMapping("/{projectId}")

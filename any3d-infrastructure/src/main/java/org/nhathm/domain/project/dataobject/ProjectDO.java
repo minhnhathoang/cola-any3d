@@ -28,9 +28,11 @@ public class ProjectDO implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    private Long userId;
+    private Long ownerId;
 
     private String name;
+
+    private String description;
 
     private String metadata;
 

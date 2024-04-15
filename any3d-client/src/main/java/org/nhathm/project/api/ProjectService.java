@@ -9,7 +9,7 @@ import org.nhathm.project.dto.clientobject.ProjectCO;
 import org.nhathm.project.dto.command.ContentCreatePresignedUploadUrlCmd;
 import org.nhathm.project.dto.command.ProjectCreateCmd;
 import org.nhathm.project.dto.command.ProjectDeleteCmd;
-import org.nhathm.project.dto.command.query.ProjectListQry;
+import org.nhathm.project.dto.command.query.ProjectListByOwnerQry;
 
 /**
  * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
@@ -20,11 +20,10 @@ public interface ProjectService {
 
     Response deleteProject(ProjectDeleteCmd cmd);
 
-
     SingleResponse<ContentCreatePresignedUploadUrlCO> createContentPresignedUploadUrl(
             ContentCreatePresignedUploadUrlCmd cmd);
 
-    MultiResponse<ProjectCO> getProjectList(ProjectListQry qry);
+    MultiResponse<ProjectCO> getProjectListByOwnerId(ProjectListByOwnerQry qry);
 
     MultiResponse<ContentCO> getContentListByPageQry(ContentListByPageQry qry);
 }
