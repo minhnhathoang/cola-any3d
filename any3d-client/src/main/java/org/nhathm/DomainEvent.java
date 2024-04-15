@@ -5,6 +5,6 @@ package org.nhathm;
  */
 public class DomainEvent {
 
-    public static final String PROJECT_TOPIC = "PROJECT_TOPIC";
+    public static final String PROJECT_TOPIC = "project-event-topic";
 
 }

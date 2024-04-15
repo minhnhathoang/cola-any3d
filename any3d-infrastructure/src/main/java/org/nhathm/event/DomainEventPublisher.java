@@ -18,10 +18,10 @@ public class DomainEventPublisher {
     }
 
     public void publishUserEvent(Object msg) {
-        publish("user-events", msg);
+        publish("user-events-topic", msg);
     }
 
     public void publishProjectEvent(Object msg) {
-        publish("project-events", msg);
+        this.publish("project-events-topic", msg);
     }
 }

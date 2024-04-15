@@ -1,25 +1,16 @@
 package org.nhathm.app.project.consumer;
 
-import lombok.extern.slf4j.Slf4j;
-import org.nhathm.integration.mq.Acknowledgement;
-import org.nhathm.integration.mq.Message;
-import org.nhathm.integration.mq.MessageQueueConsumer;
-import org.nhathm.integration.mq.MessageQueueListener;
-
-import java.util.List;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
 /**
  * @author nhathm
  */
-@Slf4j
-@MessageQueueListener(topic = "project-events", group = "project-consumer")
-public class ProjectConsumer implements MessageQueueConsumer {
+@Component
+public class ProjectConsumer {
 
-    @Override
-    public void consume(List<Message> messages, Acknowledgement ack) {
-        for (Message message : messages) {
-            log.info("Received message: {}", message);
-        }
-        ack.acknowledge();
+    @KafkaListener(topics = "project-events-topic")
+    public void consumeProjectEvent(Object msg) {
+        System.out.println("Consuming project event: " + msg);
     }
 }
