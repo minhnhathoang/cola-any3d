@@ -36,9 +36,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

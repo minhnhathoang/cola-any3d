@@ -21,10 +21,15 @@ spring:
     username: admin
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      connection-timeout: 20000
 
   liquibase:
     enabled: false
     change-log: classpath:db/changelog/db.changelog-master.yaml
+
 
   security:
     jwt:
@@ -54,6 +59,10 @@ spring:
           json:
             trusted:
               packages: '*'
+
+            default:
+              value:
+                type: org.nhathm.kafka.MQMessage
 
 minio:
   url: http://localhost:9000

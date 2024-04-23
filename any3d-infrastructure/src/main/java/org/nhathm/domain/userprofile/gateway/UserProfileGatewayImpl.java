@@ -11,9 +11,7 @@ import org.nhathm.domain.userprofile.entity.UserProfile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @RequiredArgsConstructor
 @Component
 public class UserProfileGatewayImpl
@@ -31,13 +29,13 @@ public class UserProfileGatewayImpl
     }
 
     @Override
-    public UserProfile findByUserId(Long userId) {
+    public UserProfile findByUserId(String userId) {
         return profileConvertor.toEntity(userProfileMapper.selectById(userId));
     }
 
     @Override
-    public void updateAvatar(Long userId, MultipartFile avatarFile) {
-        objectStorageGateway.uploadMultiPartObject(MinioConfig.PUBLIC_BUCKET_NAME, userId.toString(), avatarFile);
+    public void updateAvatar(String userId, MultipartFile avatarFile) {
+        objectStorageGateway.uploadMultiPartObject(MinioConfig.PUBLIC_BUCKET_NAME, userId, avatarFile);
     }
 }
 

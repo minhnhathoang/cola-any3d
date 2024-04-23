@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
 import org.springframework.security.authentication.AuthenticationManager;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @EnableConfigurationProperties(JwtProperties.class)
 @RequiredArgsConstructor
 @Slf4j

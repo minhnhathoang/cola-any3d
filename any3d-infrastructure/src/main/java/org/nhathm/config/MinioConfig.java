@@ -11,9 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Data
 @Configuration
 public class MinioConfig {

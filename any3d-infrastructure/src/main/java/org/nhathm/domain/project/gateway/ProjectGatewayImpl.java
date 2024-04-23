@@ -6,16 +6,14 @@ import org.nhathm.domain.project.database.ProjectConvertor;
 import org.nhathm.domain.project.database.ProjectMapper;
 import org.nhathm.domain.project.dataobject.ProjectDO;
 import org.nhathm.domain.project.entity.Project;
+import org.nhathm.dto.domainevent.ProjectCreatedEvent;
 import org.nhathm.event.DomainEventPublisher;
-import org.nhathm.project.dto.event.ProjectCreatedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @RequiredArgsConstructor
 @Component
 public class ProjectGatewayImpl
@@ -26,7 +24,7 @@ public class ProjectGatewayImpl
     private final DomainEventPublisher domainEventPublisher;
 
     @Override
-    public boolean isExistsById(Long id) {
+    public boolean isExistsById(String id) {
         return this.lambdaQuery()
                 .eq(ProjectDO::getId, id)
                 .count() > 0;
@@ -37,7 +35,7 @@ public class ProjectGatewayImpl
         ProjectDO projectDO = projectConvertor.toDataObject(project);
         this.save(projectDO);
 
-        // Publish event
+        // publish event
         ProjectCreatedEvent event = new ProjectCreatedEvent();
         event.setProjectId(projectDO.getId());
         domainEventPublisher.publishProjectEvent(event);
@@ -50,19 +48,24 @@ public class ProjectGatewayImpl
 
     @Override
     public void delete(String id) {
-//        projectRepository.deleteById(id);
+        this.baseMapper.deleteById(id);
     }
 
     @Override
-    public List<Project> getProjectListByOwnerId(Long ownerId) {
-        var projectDOList = this.lambdaQuery()
+    public List<Project> getProjectListByOwnerId(String ownerId) {
+        List<ProjectDO> projectDOList = this.lambdaQuery()
                 .eq(ProjectDO::getOwnerId, ownerId)
                 .list();
-        var projectList = new ArrayList<Project>();
+        List<Project> projectList = new ArrayList<>();
         for (ProjectDO projectDO : projectDOList) {
-            projectList.add(projectConvertor.toEntity(projectDO));
+            projectList.add(projectConvertor.lazyFetchToEntity(projectDO));
         }
         return projectList;
     }
 
+    @Override
+    public Project getById(String id) {
+        ProjectDO projectDO = this.baseMapper.getById(id);
+        return projectConvertor.lazyFetchToEntity(projectDO);
+    }
 }

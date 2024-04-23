@@ -1,13 +1,17 @@
-package auto-generated.entity;
+package auto
+
+-generated.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author nhathm
@@ -20,7 +24,7 @@ public class UserProfileDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long userId;
+    private String userId;
 
     private String name;
 

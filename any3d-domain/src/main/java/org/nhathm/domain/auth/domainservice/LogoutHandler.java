@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
 @Service
 public class LogoutHandler implements LogoutSuccessHandler {
 

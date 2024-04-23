@@ -5,9 +5,7 @@ import com.alibaba.cola.catchlog.ResponseHandlerI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Component
 public class ResponseHandlerAspect {
 

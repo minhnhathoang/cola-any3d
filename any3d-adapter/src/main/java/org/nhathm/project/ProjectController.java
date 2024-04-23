@@ -4,21 +4,15 @@ import com.alibaba.cola.dto.MultiResponse;
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.APIConstant;
-import org.nhathm.auth.gateway.SpringSecurityUtils;
-import org.nhathm.content.dto.clientobject.ContentCO;
-import org.nhathm.content.dto.command.query.ContentListByPageQry;
-import org.nhathm.project.api.ProjectService;
-import org.nhathm.project.dto.clientobject.ProjectCO;
-import org.nhathm.project.dto.command.ContentCreatePresignedUploadUrlCmd;
-import org.nhathm.project.dto.command.ProjectCreateCmd;
-import org.nhathm.project.dto.command.ProjectDeleteCmd;
-import org.nhathm.project.dto.command.query.ProjectListByOwnerQry;
+import org.nhathm.api.ProjectService;
+import org.nhathm.common.SpringSecurityUtils;
+import org.nhathm.dto.clientobject.ProjectCO;
+import org.nhathm.dto.command.ProjectAddCmd;
+import org.nhathm.dto.command.ProjectDeleteCmd;
+import org.nhathm.dto.query.ProjectListByOwnerQry;
 import org.springframework.web.bind.annotation.*;
 
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.WEB_API_PATH + "/projects")
 @RestController
@@ -27,17 +21,9 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
-    public Response createProject(@RequestBody ProjectCreateCmd cmd) {
+    public Response addProject(@RequestBody ProjectAddCmd cmd) {
         cmd.setOwnerId(SpringSecurityUtils.getUserId());
-        return projectService.createProject(cmd);
-    }
-
-    @GetMapping
-    public MultiResponse<ProjectCO> getProjectListByOwnerId() {
-        return projectService.getProjectListByOwnerId(ProjectListByOwnerQry
-                .builder()
-                .ownerId(SpringSecurityUtils.getUserId())
-                .build());
+        return projectService.addProject(cmd);
     }
 
     @DeleteMapping("/{projectId}")
@@ -45,13 +31,12 @@ public class ProjectController {
         return projectService.deleteProject(ProjectDeleteCmd.builder().projectId(projectId).build());
     }
 
-    @PostMapping("/contents/create-presigned-upload-url")
-    public Response createPresignedUploadUrl(@RequestBody ContentCreatePresignedUploadUrlCmd cmd) {
-        return projectService.createContentPresignedUploadUrl(cmd);
-    }
 
-    @GetMapping("/contents")
-    public MultiResponse<ContentCO> contentListByPageQry(@ModelAttribute ContentListByPageQry qry) {
-        return projectService.getContentListByPageQry(qry);
+    @GetMapping
+    public MultiResponse<ProjectCO> getProjectListByOwnerId() {
+        return projectService.getProjectListByOwnerId(ProjectListByOwnerQry
+                .builder()
+                .ownerId(SpringSecurityUtils.getUserId())
+                .build());
     }
 }

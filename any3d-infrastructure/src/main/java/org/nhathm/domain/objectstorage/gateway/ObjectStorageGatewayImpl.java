@@ -9,6 +9,8 @@ import org.nhathm.config.MinioConfig;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 /**
  * @author nhathm
  */
@@ -48,12 +50,13 @@ public class ObjectStorageGatewayImpl implements ObjectStorageGateway {
     }
 
     @Override
-    public String getPresignedPutUrl(String bucketName, String objectName) {
+    public String getPresignedPutUrl(String bucketName, String objectName, Map<String, String> requestParams) {
         try {
             GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
                     .method(Method.PUT)
                     .bucket(bucketName)
                     .object(objectName)
+                    .extraQueryParams(requestParams)
                     .expiry(MinioConfig.PRESIGNED_URL_EXPIRY)
                     .build();
             return minioClient.getPresignedObjectUrl(args);

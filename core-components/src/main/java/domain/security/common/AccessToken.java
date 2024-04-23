@@ -7,9 +7,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Builder
 @EqualsAndHashCode
 @NoArgsConstructor

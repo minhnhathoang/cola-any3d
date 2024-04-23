@@ -5,19 +5,16 @@ import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.APIConstant;
-import org.nhathm.user.api.UserService;
-import org.nhathm.user.dto.clientobject.UserCO;
-import org.nhathm.user.dto.command.UserDeleteCmd;
-import org.nhathm.user.dto.command.UserProfileUpdateCmd;
-import org.nhathm.user.dto.command.query.UserByIdQry;
-import org.nhathm.user.dto.command.query.UserListByPageQry;
+import org.nhathm.api.UserService;
+import org.nhathm.dto.clientobject.UserCO;
+import org.nhathm.dto.command.UserProfileUpdateCmd;
+import org.nhathm.dto.query.UserByIdQry;
+import org.nhathm.dto.query.UserListByPageQry;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.WEB_API_PATH + "/users")
 @RestController
@@ -26,14 +23,9 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/{id}")
-    public Response updateUser(@PathVariable Long id, @Valid @RequestBody UserProfileUpdateCmd cmd) {
+    public Response updateUser(@PathVariable String id, @Valid @RequestBody UserProfileUpdateCmd cmd) {
         cmd.setUserId(id);
         return userService.updateUser(cmd);
-    }
-
-    @DeleteMapping("/{id}")
-    public Response deleteUser(@PathVariable String id) {
-        return userService.deleteUser(UserDeleteCmd.builder().userId(id).build());
     }
 
     @GetMapping("/me")

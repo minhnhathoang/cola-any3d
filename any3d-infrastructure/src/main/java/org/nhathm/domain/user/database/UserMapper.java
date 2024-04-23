@@ -7,12 +7,13 @@ import org.nhathm.domain.user.dataobject.UserDO;
 
 import java.util.Optional;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Mapper
 public interface UserMapper extends BaseMapper<UserDO> {
 
     @Select("SELECT * FROM user WHERE username = #{username}")
     Optional<UserDO> selectByUsername(String username);
+
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    UserDO findById(String id);
 }

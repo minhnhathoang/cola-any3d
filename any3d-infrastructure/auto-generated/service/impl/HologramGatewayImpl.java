@@ -1,4 +1,6 @@
-package auto-generated.service.impl;
+package auto
+
+-generated.service.impl;
 
 import auto-generated.entity.HologramDO;
 import auto-generated.mapper.HologramMapper;
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author nhathm

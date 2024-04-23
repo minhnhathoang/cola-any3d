@@ -22,9 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Slf4j
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {

@@ -129,7 +129,7 @@ public class JwtTokenProvider implements InitializingBean {
                     .collect(Collectors.toList());
         }
         User principal = User.builder()
-                .id(claimsSet.getLongClaim(JwtConstants.USER_ID_KEY))
+                .id(claimsSet.getStringClaim(JwtConstants.USER_ID_KEY))
                 .username(claimsSet.getSubject())
                 .authorities(authorities)
                 .build();

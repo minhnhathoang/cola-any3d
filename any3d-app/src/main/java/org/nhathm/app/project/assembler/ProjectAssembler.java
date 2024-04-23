@@ -2,17 +2,33 @@ package org.nhathm.app.project.assembler;
 
 import domain.COAssembler;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.nhathm.app.user.assembler.UserAssembler;
 import org.nhathm.domain.project.entity.Project;
-import org.nhathm.project.dto.clientobject.ProjectCO;
-import org.nhathm.project.dto.command.ProjectCreateCmd;
+import org.nhathm.domain.user.entity.User;
+import org.nhathm.dto.clientobject.ProjectCO;
+import org.nhathm.dto.command.ProjectAddCmd;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = org.mapstruct.NullValueCheckStrategy.ALWAYS,
-        nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
+        nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE,
+        uses = {UserAssembler.class}
+)
 public interface ProjectAssembler extends COAssembler<ProjectCO, Project> {
 
-    Project toEntity(ProjectCreateCmd cmd);
+    @Mapping(target = "metadata", ignore = true)
+    @Mapping(target = "lastModifiedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "owner", source = "ownerId", qualifiedByName = "project_ownerFromOwnerId")
+    Project toEntity(ProjectAddCmd cmd);
+
+    ProjectCO toCO(Project project);
+
+    @Named("project_ownerFromOwnerId")
+    default User ownerFromOwnerId(String ownerId) {
+        return User.builder().id(ownerId).build();
+    }
 }

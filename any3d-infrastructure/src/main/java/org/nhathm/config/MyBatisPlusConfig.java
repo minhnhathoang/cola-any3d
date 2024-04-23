@@ -3,13 +3,16 @@ package org.nhathm.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+import javax.sql.DataSource;
+
+
 @Configuration
 @EnableTransactionManagement
 public class MyBatisPlusConfig {
@@ -21,5 +24,10 @@ public class MyBatisPlusConfig {
         return interceptor;
     }
 
-
+    @Bean
+    public PlatformTransactionManager transactionManager(@Autowired DataSource dataSource) {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+        transactionManager.setNestedTransactionAllowed(true);
+        return transactionManager;
+    }
 }

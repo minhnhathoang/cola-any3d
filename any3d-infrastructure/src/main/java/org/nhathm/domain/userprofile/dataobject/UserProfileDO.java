@@ -25,7 +25,7 @@ public class UserProfileDO implements Serializable {
     private static final long serialVersionUID = -381841047201887255L;
 
     @TableId
-    private Long userId;
+    private String userId;
 
     private String name;
 

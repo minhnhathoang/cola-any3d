@@ -19,9 +19,7 @@ import util.error.ThirdServiceException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @RequiredArgsConstructor
 @RestControllerAdvice
 @Slf4j

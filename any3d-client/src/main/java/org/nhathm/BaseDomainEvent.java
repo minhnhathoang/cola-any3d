@@ -16,6 +16,8 @@ public class BaseDomainEvent implements Serializable {
 
     private final Date createdAt;
 
+    private final Class<?> type = this.getClass();
+
     public BaseDomainEvent() {
         this.id = UUID.randomUUID().toString();
         this.createdAt = new Date();

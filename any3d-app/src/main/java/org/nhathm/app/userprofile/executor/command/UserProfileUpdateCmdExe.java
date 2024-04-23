@@ -6,13 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.nhathm.config.MinioConfig;
 import org.nhathm.domain.userprofile.entity.UserProfile;
 import org.nhathm.domain.userprofile.gateway.UserProfileGateway;
-import org.nhathm.user.dto.command.UserProfileUpdateCmd;
+import org.nhathm.dto.command.UserProfileUpdateCmd;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @RequiredArgsConstructor
 @Component
 public class UserProfileUpdateCmdExe {

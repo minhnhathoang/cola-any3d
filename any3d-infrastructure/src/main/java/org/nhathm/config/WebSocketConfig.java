@@ -44,10 +44,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final AdviceWebsocketHandshakeHandler adviceWebsocketHandshakeHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
+                .setHandshakeHandler(adviceWebsocketHandshakeHandler)
                 .setAllowedOrigins("*");
     }
 

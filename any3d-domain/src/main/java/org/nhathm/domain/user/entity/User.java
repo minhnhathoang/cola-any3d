@@ -6,9 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Builder
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -17,7 +15,7 @@ import java.util.Collection;
 @Data
 public class User implements UserDetails {
 
-    private Long id;
+    private String id;
 
     private String username;
 

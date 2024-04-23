@@ -4,12 +4,10 @@ import org.nhathm.domain.project.entity.Project;
 
 import java.util.List;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 public interface ProjectGateway {
 
-    boolean isExistsById(Long id);
+    boolean isExistsById(String id);
 
     void createProject(Project project);
 
@@ -17,5 +15,7 @@ public interface ProjectGateway {
 
     void delete(String id);
 
-    List<Project> getProjectListByOwnerId(Long ownerId);
+    List<Project> getProjectListByOwnerId(String ownerId);
+
+    Project getById(String id);
 }

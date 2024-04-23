@@ -1,11 +1,13 @@
-package auto-generated.mapper;
+package auto
+
+-generated.mapper;
 
 import auto-generated.entity.ImageTargetDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author nhathm

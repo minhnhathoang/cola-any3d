@@ -11,9 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -26,7 +24,6 @@ public class UserGatewayImpl
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("loadUserByUsername: {}", username);
         var optionalUserDO = this.baseMapper.selectByUsername(username);
         if (optionalUserDO.isEmpty()) {
             throw new UsernameNotFoundException("User not found");

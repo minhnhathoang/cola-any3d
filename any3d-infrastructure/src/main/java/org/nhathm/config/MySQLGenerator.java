@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author <a href="mailto:nhathm.uet@outlook.com">nhathm</a>
- */
+
 @Slf4j
 @Configuration
 public class MySQLGenerator {
@@ -24,7 +22,7 @@ public class MySQLGenerator {
     private String password;
 
 
-//    @Bean
+    //    @Bean
     public void autoGenerate() {
         log.info("Start auto generate mybatis-plus code");
         FastAutoGenerator.create(url, username, password)

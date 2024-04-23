@@ -7,7 +7,7 @@ public interface UserProfileGateway {
 
     void updateUserProfile(UserProfile userProfile);
 
-    UserProfile findByUserId(Long userId);
+    UserProfile findByUserId(String userId);
 
-    void updateAvatar(Long userId, MultipartFile avatarFile);
+    void updateAvatar(String userId, MultipartFile avatarFile);
 }
