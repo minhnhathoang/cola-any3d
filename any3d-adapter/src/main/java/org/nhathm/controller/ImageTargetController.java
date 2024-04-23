@@ -1,4 +1,4 @@
-package org.nhathm.imagetarget;
+package org.nhathm.controller;
 
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;

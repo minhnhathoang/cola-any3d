@@ -1,4 +1,4 @@
-package org.nhathm.hologram;
+package org.nhathm.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.nhathm.APIConstant;

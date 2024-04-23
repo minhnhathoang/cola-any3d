@@ -1,4 +1,4 @@
-package org.nhathm.project;
+package org.nhathm.controller;
 
 import com.alibaba.cola.dto.MultiResponse;
 import com.alibaba.cola.dto.Response;

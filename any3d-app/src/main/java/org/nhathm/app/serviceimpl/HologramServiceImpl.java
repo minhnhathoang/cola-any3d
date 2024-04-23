@@ -1,4 +1,4 @@
-package org.nhathm.app.service;
+package org.nhathm.app.serviceimpl;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

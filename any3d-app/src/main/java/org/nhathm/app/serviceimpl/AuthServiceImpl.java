@@ -1,4 +1,4 @@
-package org.nhathm.app.service;
+package org.nhathm.app.serviceimpl;
 
 import com.alibaba.cola.catchlog.CatchAndLog;
 import com.alibaba.cola.dto.Response;

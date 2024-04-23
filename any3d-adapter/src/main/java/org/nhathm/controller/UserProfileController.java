@@ -1,4 +1,4 @@
-package org.nhathm.userprofile;
+package org.nhathm.controller;
 
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
