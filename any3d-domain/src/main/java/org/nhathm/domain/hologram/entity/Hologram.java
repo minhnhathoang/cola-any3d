@@ -2,7 +2,6 @@ package org.nhathm.domain.hologram.entity;
 
 import com.alibaba.cola.domain.Entity;
 import lombok.Data;
-import org.nhathm.domain.objectstorage.entity.HologramType;
 
 
 @Data

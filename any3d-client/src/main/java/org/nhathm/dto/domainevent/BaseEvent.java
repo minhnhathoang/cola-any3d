@@ -1,4 +1,4 @@
-package org.nhathm;
+package org.nhathm.dto.domainevent;
 
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
  * @author nhathm
  */
 @Getter
-public class BaseDomainEvent implements Serializable {
+public class BaseEvent implements Serializable {
 
     private final String id;
 
@@ -18,7 +18,7 @@ public class BaseDomainEvent implements Serializable {
 
     private final Class<?> type = this.getClass();
 
-    public BaseDomainEvent() {
+    public BaseEvent() {
         this.id = UUID.randomUUID().toString();
         this.createdAt = new Date();
     }

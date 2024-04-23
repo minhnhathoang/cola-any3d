@@ -8,6 +8,5 @@ import lombok.Data;
 @Data
 public class HologramUploadedEvent {
 
-    private String contentId;
-
+    private String hologramId;
 }
