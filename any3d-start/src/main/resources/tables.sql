@@ -57,10 +57,10 @@ CREATE TABLE content
 
 CREATE TABLE hologram
 (
-    id         varchar(36) NOT NULL,
-    content_id varchar(36) NOT NULL,
-    filename   varchar(70) NOT NULL,
-    type       varchar(20) NOT NULL,
+    id              varchar(36) NOT NULL,
+    content_id      varchar(36) NOT NULL,
+    filename        varchar(70) NOT NULL,
+    additional_data json DEFAULT NULL,
 
     PRIMARY KEY (id),
     CONSTRAINT hologram_FK FOREIGN KEY (content_id) REFERENCES content (id)
@@ -92,13 +92,12 @@ CREATE TABLE vuforia_key
   DEFAULT CHARSET = utf8;
 
 
-###
-ACL tables
+###ACL tables
 CREATE TABLE acl_sid
 (
     id        bigint unsigned NOT NULL AUTO_INCREMENT,
-    principal tinyint(1) NOT NULL,
-    sid       varchar(100) NOT NULL,
+    principal tinyint(1)      NOT NULL,
+    sid       varchar(100)    NOT NULL,
 
     PRIMARY KEY (id),
     UNIQUE KEY acl_sid_UK1 (sid, principal)
@@ -108,7 +107,7 @@ CREATE TABLE acl_sid
 CREATE TABLE acl_class
 (
     id   bigint unsigned NOT NULL AUTO_INCREMENT,
-    name varchar(100) NOT NULL,
+    name varchar(100)    NOT NULL,
 
     PRIMARY KEY (id),
     UNIQUE KEY acl_class_UK1 (name)
@@ -118,8 +117,8 @@ CREATE TABLE acl_class
 CREATE TABLE acl_object_identity
 (
     id                 bigint signed NOT NULL AUTO_INCREMENT,
-    object_id_class    bigint(20) NOT NULL,
-    object_id_identity bigint(20) NOT NULL,
+    object_id_class    bigint(20)    NOT NULL,
+    object_id_identity bigint(20)    NOT NULL,
     owner_sid          bigint(20) DEFAULT NULL,
     entries_inheriting tinyint(1) DEFAULT NULL,
 
@@ -134,9 +133,9 @@ CREATE TABLE acl_entry
 (
     id                  bigint(20) NOT NULL,
     acl_object_identity bigint(20) NOT NULL,
-    ace_order           int(11) NOT NULL,
+    ace_order           int(11)    NOT NULL,
     sid                 bigint(20) NOT NULL,
-    mask                int(11) NOT NULL,
+    mask                int(11)    NOT NULL,
     granting            tinyint(1) NOT NULL,
     audit_success       tinyint(1) NOT NULL,
     audit_failure       tinyint(1) NOT NULL,

@@ -30,8 +30,9 @@ public class HologramUploadedEventHandler {
         if (!userMetadata.containsKey(MetadataKey.X_AMZ_META_IS_PRESIGNED_URL)) {
             return;
         }
+
         String projectId = userMetadata.get(MetadataKey.X_AMZ_META_PROJECT_ID);
-        String filename = event.objectName();
+        String filename = userMetadata.get(MetadataKey.X_AMZ_META_FILE_NAME);
 
         Content content = DomainFactory.create(Content.class);
         String contentId = event.objectName();

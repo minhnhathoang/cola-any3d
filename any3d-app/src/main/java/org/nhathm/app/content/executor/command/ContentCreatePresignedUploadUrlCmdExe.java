@@ -30,6 +30,7 @@ public class ContentCreatePresignedUploadUrlCmdExe {
         requestParams.put(MetadataKey.X_AMZ_META_IS_PRESIGNED_URL, Strings.EMPTY);
         requestParams.put(MetadataKey.X_AMZ_META_USER_ID, SpringSecurityUtils.getUserId());
         requestParams.put(MetadataKey.X_AMZ_META_PROJECT_ID, cmd.getProjectId());
+        requestParams.put(MetadataKey.X_AMZ_META_FILE_NAME, cmd.getHologramFileName());
 
         String contentId = UUID.randomUUID().toString();
         String presignedUrl = objectStorageGateway.getPresignedPutUrl(MinioConfig.COMMON_BUCKET_NAME, contentId, requestParams);

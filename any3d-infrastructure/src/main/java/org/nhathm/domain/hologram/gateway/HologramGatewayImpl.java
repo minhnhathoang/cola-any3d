@@ -20,8 +20,6 @@ public class HologramGatewayImpl extends ServiceImpl<HologramMapper, HologramDO>
     public void addHologram(Hologram hologram) {
         HologramDO hologramDO = hologramConvertor.toDataObject(hologram);
         this.save(hologramDO);
-
-        log.info("Hologram added: {}", hologramDO);
     }
 
     @Override
