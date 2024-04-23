@@ -1,4 +1,4 @@
-package org.nhathm.app.event.handler;
+package org.nhathm.domain.objectstorage.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.minio.messages.EventType;
