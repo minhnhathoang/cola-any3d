@@ -1,4 +1,4 @@
-package org.nhathm.domain.objectstorage;
+package org.nhathm.domain.objectstorage.entity;
 
 /**
  * @author nhathm

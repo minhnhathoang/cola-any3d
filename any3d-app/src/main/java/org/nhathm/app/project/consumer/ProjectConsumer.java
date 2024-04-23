@@ -2,9 +2,9 @@ package org.nhathm.app.project.consumer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nhathm.BaseDomainEvent;
 import org.nhathm.app.project.assembler.ProjectAssembler;
 import org.nhathm.domain.project.gateway.ProjectGateway;
+import org.nhathm.dto.domainevent.BaseEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class ProjectConsumer {
     private final ProjectGateway projectGateway;
 
     @KafkaListener(topics = "project-events-topic")
-    public void consumeProjectEvent(BaseDomainEvent event) {
+    public void consumeProjectEvent(BaseEvent event) {
 
         log.info("[Project Event] - consume message: {}", event);
 //        switch (event.getType()) {

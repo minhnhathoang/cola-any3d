@@ -1,11 +1,10 @@
-package org.nhathm.app.objectstorage.event;
+package org.nhathm.app.event.handler;
 
 import com.alibaba.cola.catchlog.CatchAndLog;
 import io.minio.messages.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nhathm.domain.content.gateway.ContentGateway;
-import org.nhathm.domain.hologram.gateway.HologramGateway;
+import org.nhathm.event.EventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
 import org.springframework.stereotype.Component;
@@ -20,12 +19,6 @@ import java.io.IOException;
 @CatchAndLog
 public class ObjectStorageConsumer {
 
-    private final ContentGateway contentGateway;
-
-    private final HologramGateway hologramGateway;
-
-    private final HologramUploadedEventHandler hologramUploadedEventHandler;
-
     @KafkaListener(topics = "minio-events")
     public void consume(String payload, ConsumerRecordMetadata metadata) throws IOException {
         log.info("[MinIO Notification] - consume message: {} | metadata: {}", payload, metadata);
@@ -39,11 +32,13 @@ public class ObjectStorageConsumer {
         }
     }
 
+    private final EventPublisher eventPublisher;
+
     private void handleEvent(Event event) {
         log.info("Event type: {}", event.eventType());
         switch (event.eventType()) {
             case OBJECT_CREATED_PUT -> {
-                hologramUploadedEventHandler.handleObjectCreatedPut(event);
+                eventPublisher.publish(event);
             }
         }
     }

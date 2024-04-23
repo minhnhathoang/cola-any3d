@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nhathm.common.SpringSecurityUtils;
 import org.nhathm.config.MinioConfig;
-import org.nhathm.domain.objectstorage.MetadataKey;
+import org.nhathm.domain.objectstorage.entity.MetadataKey;
 import org.nhathm.domain.objectstorage.gateway.ObjectStorageGateway;
 import org.nhathm.dto.clientobject.ContentCreatePresignedUploadUrlCO;
 import org.nhathm.dto.command.ContentCreatePresignedUrlUploadHologramCmd;

@@ -1,4 +1,4 @@
-package org.nhathm.app.objectstorage.event;
+package org.nhathm.app.event.handler;
 
 import com.alibaba.cola.domain.DomainFactory;
 import io.minio.messages.Event;
@@ -8,7 +8,10 @@ import org.nhathm.domain.content.entity.Content;
 import org.nhathm.domain.content.gateway.ContentGateway;
 import org.nhathm.domain.hologram.entity.Hologram;
 import org.nhathm.domain.hologram.gateway.HologramGateway;
-import org.nhathm.domain.objectstorage.MetadataKey;
+import org.nhathm.domain.objectstorage.entity.MetadataKey;
+import org.nhathm.dto.domainevent.ContentCreatedEvent;
+import org.nhathm.event.EventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +21,17 @@ import java.util.Map;
 @Log4j2
 @Component
 @RequiredArgsConstructor
-public class HologramUploadedEventHandler {
+public class HologramUploadedHandler {
+
+    private final EventPublisher eventPublisher;
 
     private final ContentGateway contentGateway;
 
     private final HologramGateway hologramGateway;
 
+    @EventListener
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void handleObjectCreatedPut(Event event) {
+    public void handle(Event event) {
         Map<String, String> userMetadata = event.userMetadata();
         if (!userMetadata.containsKey(MetadataKey.X_AMZ_META_IS_PRESIGNED_URL)) {
             return;
@@ -39,12 +45,15 @@ public class HologramUploadedEventHandler {
         content.setId(contentId);
         content.setProjectId(projectId);
         contentGateway.addContent(content);
-        log.info("Content created: {}", contentId);
 
         Hologram hologram = DomainFactory.create(Hologram.class);
         hologram.setContentId(contentId);
         hologram.setFilename(filename);
         hologramGateway.addHologram(hologram);
-        log.info("Hologram uploaded: {}", contentId);
+
+        // publish ContentCreatedEvent
+        ContentCreatedEvent contentCreatedEvent = new ContentCreatedEvent();
+        contentCreatedEvent.setContentId(contentId);
+        eventPublisher.publish(contentCreatedEvent);
     }
 }

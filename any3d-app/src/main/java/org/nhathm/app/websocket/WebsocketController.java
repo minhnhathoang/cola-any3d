@@ -1,4 +1,4 @@
-package org.nhathm.app.objectstorage.event;
+package org.nhathm.app.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
