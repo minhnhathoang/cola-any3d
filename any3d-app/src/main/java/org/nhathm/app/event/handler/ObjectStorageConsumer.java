@@ -19,6 +19,8 @@ import java.io.IOException;
 @CatchAndLog
 public class ObjectStorageConsumer {
 
+    private final EventPublisher eventPublisher;
+
     @KafkaListener(topics = "minio-events")
     public void consume(String payload, ConsumerRecordMetadata metadata) throws IOException {
         log.info("[MinIO Notification] - consume message: {} | metadata: {}", payload, metadata);
@@ -31,9 +33,6 @@ public class ObjectStorageConsumer {
             log.error("Error when parsing message: {}", e.getMessage());
         }
     }
-
-    private final EventPublisher eventPublisher;
-
     private void handleEvent(Event event) {
         log.info("Event type: {}", event.eventType());
         switch (event.eventType()) {
