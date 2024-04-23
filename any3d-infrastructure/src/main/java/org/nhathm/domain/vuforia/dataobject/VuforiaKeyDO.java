@@ -12,7 +12,7 @@ import lombok.Data;
 @TableName("vuforia_key")
 public class VuforiaKeyDO {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String projectId;
 
     private String accessKey;

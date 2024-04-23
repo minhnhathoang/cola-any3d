@@ -24,7 +24,6 @@ public class ContentServiceImpl implements ContentService {
 
     ContentCreatePresignedUploadUrlCmdExe contentCreatePresignedUploadUrlCmdExe;
 
-
     @Override
     public Response addContent(ContentAddCmd cmd) {
         return null;
