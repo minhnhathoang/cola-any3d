@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ContentCreatePresignedUploadUrlCO extends ClientObject {
 
-    private String contentId;
+    private String hologramId;
 
     private String presignedUrl;
 }

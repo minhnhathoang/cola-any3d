@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        uses = {UserConvertor.class}
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 @RequiredArgsConstructor
 public abstract class ProjectConvertor implements EntityConvertor<Project, ProjectDO> {
@@ -25,14 +24,8 @@ public abstract class ProjectConvertor implements EntityConvertor<Project, Proje
     @Autowired
     protected UserConvertor userConvertor;
 
-    @Mapping(target = "ownerId", source = "owner.id")
+    @Mappings({
+            @Mapping(target = "ownerId", source = "owner.id")
+    })
     public abstract ProjectDO toDataObject(Project project);
-
-    @Mapping(source = "ownerId", target = "owner", qualifiedByName = "ownerFromOwnerId")
-    public abstract Project lazyFetchToEntity(ProjectDO projectDO);
-
-    @Named("ownerFromOwnerId")
-    User ownerFromOwnerId(String userId) {
-        return userConvertor.toEntity(userMapper.findById(userId));
-    }
 }

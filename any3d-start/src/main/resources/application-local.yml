@@ -1,0 +1,85 @@
+project:
+  name: any3d
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
+
+spring:
+  application:
+    name: any3d
+  datasource:
+    url: jdbc:mysql://localhost:3306/any3d
+    username: admin
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      connection-timeout: 20000
+
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+
+  security:
+    jwt:
+      header: Authorization
+      private:
+        key: classpath:app.key
+      public:
+        key: classpath:app.pub
+      tokenValidityInSeconds: 180000 # 30 minutes
+      tokenValidityInSecondsForRememberMe: 2592000 # 30 days
+      anonymousUrls:
+        - /api/auth/login
+        - /api/auth/register
+        - /ws/**
+      permitAllUrls:
+
+      authenticatedUrls:
+        - /api/users/**
+  kafka:
+    bootstrap-servers: localhost:9092
+    client-id: ${spring.application.name}
+    consumer:
+      group-id: ${spring.application.name}
+      auto-offset-reset: earliest
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+
+            default:
+              value:
+                type: org.nhathm.kafka.MQMessage
+
+minio:
+  url: http://localhost:9000
+  username: minioadmin
+  password: minioadmin
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    auto-mapping-behavior: full
+    call-setters-on-nulls: true
+    use-column-label: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+

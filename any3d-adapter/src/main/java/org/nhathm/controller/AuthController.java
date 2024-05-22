@@ -8,10 +8,7 @@ import org.nhathm.api.AuthService;
 import org.nhathm.dto.clientobject.AuthLoginCO;
 import org.nhathm.dto.command.AuthRegisterCmd;
 import org.nhathm.dto.query.AuthLoginQry;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 

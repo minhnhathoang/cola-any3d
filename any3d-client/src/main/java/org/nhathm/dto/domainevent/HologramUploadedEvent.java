@@ -1,7 +1,12 @@
 package org.nhathm.dto.domainevent;
 
+import lombok.Data;
 
-public class HologramUploadedEvent extends BaseEvent {
+/**
+ * @author nhathm
+ */
+@Data
+public class HologramUploadedEvent {
 
-    private String contentId;
+    private String hologramId;
 }

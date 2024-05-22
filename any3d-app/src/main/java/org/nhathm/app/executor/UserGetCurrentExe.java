@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nhathm.app.assembler.UserAssembler;
 import org.nhathm.common.SpringSecurityUtils;
 import org.nhathm.domain.user.entity.User;
+import org.nhathm.domain.user.gateway.UserGateway;
 import org.nhathm.dto.clientobject.UserCO;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +15,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserGetCurrentExe {
 
+    private final UserGateway userGateway;
     private final UserAssembler userAssembler;
 
     public SingleResponse<UserCO> execute() {
-        var optionalUser = SpringSecurityUtils.getPrincipal();
-        if (optionalUser.isEmpty()) {
-            throw new SysException("Authentication required");
-        }
-        User user = optionalUser.get();
+        String username = SpringSecurityUtils.getUserName()
+                .orElseThrow(() -> new SysException("User not found"));
+        User user = userGateway.loadUserByUsername(username);
         UserCO userCO = userAssembler.toCO(user);
         return SingleResponse.of(userCO);
     }

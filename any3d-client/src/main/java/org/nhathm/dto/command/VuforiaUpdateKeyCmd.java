@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class VuforiaUpdateKeyCmd {
 
-    private String projectId;
+    private String id;
 
     private String accessKey;
 

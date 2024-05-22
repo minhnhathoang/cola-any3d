@@ -2,6 +2,8 @@ package org.nhathm.dto.clientobject;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 
 @Data
 public class ContentCO {
@@ -11,4 +13,16 @@ public class ContentCO {
     private String projectId;
 
     private String name;
+
+    private String metadata;
+
+    private HologramCO hologram;
+
+    private ImageTargetCO imageTarget;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime lastModifiedAt;
+
+    private UserCO owner;
 }

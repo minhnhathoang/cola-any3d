@@ -2,6 +2,7 @@ package org.nhathm.controller;
 
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.fastjson.JSON;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.APIConstant;
 import org.nhathm.api.UserProfileService;
@@ -11,6 +12,7 @@ import org.nhathm.dto.command.UserProfileUpdateCmd;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import util.json.JsonUtils;
 
 import javax.validation.Valid;
 
@@ -37,12 +39,5 @@ public class UserProfileController {
     @PreAuthorize("@springSecurityUtils.isMe(#userId)")
     public Response getUserProfileBy(@PathVariable String userId) {
         return userProfileService.getUserProfile(userId);
-    }
-
-    @PutMapping("/{userId}")
-    @PreAuthorize("@springSecurityUtils.isMe(#userId)")
-    public Response updateUserProfile(@PathVariable String userId, @Valid @RequestBody UserProfileUpdateCmd cmd) {
-        cmd.setUserId(userId);
-        return userProfileService.updateUserProfile(cmd);
     }
 }

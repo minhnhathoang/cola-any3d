@@ -5,8 +5,10 @@ import com.alibaba.cola.domain.DomainFactory;
 import com.alibaba.cola.dto.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.nhathm.config.MinioConfig;
 import org.nhathm.domain.arsdk.ArSdkType;
 import org.nhathm.domain.arsdk.VuforiaAddTargetResponse;
+import org.nhathm.domain.arsdk.VuforiaGetTargetResponse;
 import org.nhathm.domain.content.entity.Content;
 import org.nhathm.domain.content.gateway.ContentGateway;
 import org.nhathm.domain.imagetarget.entity.ImageTarget;
@@ -15,6 +17,7 @@ import org.nhathm.domain.userprofile.domainservice.VuforiaApiService;
 import org.nhathm.domain.vuforia.entity.VuforiaKey;
 import org.nhathm.domain.vuforia.gateway.VuforiaGateway;
 import org.nhathm.dto.command.ImageTargetAddCmd;
+import org.nhathm.objectstorage.ObjectStorageService;
 import org.springframework.stereotype.Component;
 import util.json.JsonUtils;
 
@@ -30,6 +33,8 @@ public class ImageTargetAddCmdExe {
     private final ContentGateway contentGateway;
 
     private final ImageTargetGateway imageTargetGateway;
+
+    private final ObjectStorageService objectStorageService;
 
     private final VuforiaGateway vuforiaGateway;
 
@@ -52,13 +57,18 @@ public class ImageTargetAddCmdExe {
             log.error("Failed to upload image target to Vuforia cloud: {}", JsonUtils.toJson(vuforiaResponse));
             return Response.buildFailure(vuforiaResponse.getResultCode(), "Failed to upload image target to Vuforia cloud");
         }
-
         String targetId = vuforiaResponse.getTargetId();
+
+        objectStorageService.uploadMultiPartObject(MinioConfig.COMMON_BUCKET_NAME, vuforiaResponse.getTargetId(), cmd.getImageFile());
+
+        VuforiaGetTargetResponse vuforiaTarget = vuforiaApiService.getTarget(key, targetId);
+
         ImageTarget imageTarget = DomainFactory.create(ImageTarget.class);
         imageTarget.setId(targetId);
         imageTarget.setContentId(cmd.getContentId());
         imageTarget.setArSdkType(type);
         imageTarget.setFilename(cmd.getImageFile().getOriginalFilename());
+        imageTarget.setAdditionalData(JsonUtils.toJson(vuforiaTarget.getTargetRecord()));
         imageTargetGateway.addImageTarget(imageTarget);
 
         return Response.buildSuccess();

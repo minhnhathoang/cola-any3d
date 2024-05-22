@@ -6,7 +6,10 @@ import com.alibaba.cola.dto.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import org.nhathm.APIConstant;
 import org.nhathm.api.UserService;
+import org.nhathm.common.SpringSecurityUtils;
 import org.nhathm.dto.clientobject.UserCO;
+import org.nhathm.dto.command.AuthRegisterCmd;
+import org.nhathm.dto.command.UserChangePasswordCmd;
 import org.nhathm.dto.command.UserProfileUpdateCmd;
 import org.nhathm.dto.query.UserByIdQry;
 import org.nhathm.dto.query.UserListByPageQry;
@@ -41,5 +44,11 @@ public class UserController {
     @GetMapping
     public PageResponse<UserCO> getUserListBy(@Valid @ModelAttribute UserListByPageQry qry) {
         return userService.listUserBy(qry);
+    }
+
+    @PutMapping("/change-password")
+    public Response changePassword(@Valid @RequestBody UserChangePasswordCmd cmd) {
+        cmd.setUserId(SpringSecurityUtils.getUserId());
+        return userService.changePassword(cmd);
     }
 }

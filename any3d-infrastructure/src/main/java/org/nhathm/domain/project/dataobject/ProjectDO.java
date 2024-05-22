@@ -1,42 +1,58 @@
 package org.nhathm.domain.project.dataobject;
 
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.github.yulichang.annotation.EntityMapping;
+import com.github.yulichang.annotation.FieldMapping;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.nhathm.domain.content.dataobject.ContentDO;
+import org.nhathm.domain.user.dataobject.UserDO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * <p>
- *
- * </p>
  *
  * @author nhathm
  * @since 2024-04-06
  */
 @Getter
 @Setter
-@TableName("project")
-public class ProjectDO implements Serializable {
+@TableName(value = "project", autoResultMap = true)
+@ToString
+public class ProjectDO {
 
-    private static final long serialVersionUID = 1L;
-
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
+    @TableField
     private String ownerId;
 
+    @TableField
     private String name;
 
+    @TableField
     private String description;
 
+    @TableField
     private String metadata;
 
+    @TableField
     private LocalDateTime createdAt;
 
+    @TableField
     private LocalDateTime lastModifiedAt;
+
+    @TableLogic
+    private Integer deleted;
+
+
+    @TableField(exist = false)
+    private UserDO owner;
+
+    @TableField(exist = false)
+    private List<ContentDO> contents;
 }

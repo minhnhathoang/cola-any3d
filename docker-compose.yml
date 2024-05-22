@@ -1,6 +1,5 @@
 version: '3.7'
 
-# Settings and configurations that are common for all containers
 x-minio-common: &minio-common
   image: quay.io/minio/minio:RELEASE.2024-03-15T01-07-19Z
   command: server --console-address ":9001" http://minio{1...4}/data{1...2}
@@ -20,10 +19,24 @@ x-minio-common: &minio-common
     timeout: 5s
     retries: 5
 
-# starts 4 docker containers running minio server instances.
-# using nginx reverse proxy, load balancing, you can access
-# it through port 9000.
 services:
+#  springboot:
+#    platform: linux/x86_64
+#    image: any3d
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/any3d
+#      SPRING_DATASOURCE_USERNAME: admin
+#      SPRING_DATASOURCE_PASSWORD: password
+#      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
+#      MINIO_URL: http://minio1:9000
+#      MINIO_USERNAME: minioadmin
+#      MINIO_PASSWORD: minioadmin
+#    ports:
+#      - "8080:8080"
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -45,8 +58,8 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.2.4:9092
-      #      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.29.112.1:9092
+##      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.2.4:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.20.16.1:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
@@ -106,23 +119,6 @@ services:
       - minio3
       - minio4
 
-#  nginx_proxy_mgr:
-#    image: 'docker.io/jc21/nginx-proxy-manager:latest'
-#    ports:
-#      - '80:80'
-#      - '81:81'
-#      - '443:443'
-#    volumes:
-#      - ./data:/data
-#      - ./letsencrypt:/etc/letsencrypt
-#    depends_on:
-#      - minio1
-#      - minio2
-#      - minio3
-#      - minio4
-
-## By default, this config uses default local driver,
-## For custom volumes replace with volume driver configuration.
 volumes:
   data1-1:
   data1-2:

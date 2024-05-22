@@ -22,9 +22,11 @@ public class UserProfileUpdateCmdExe {
     public Response execute(UserProfileUpdateCmd cmd) {
         UserProfile userProfile = DomainFactory.create(UserProfile.class);
         BeanUtils.copyProperties(cmd, userProfile);
+        System.out.println("UserProfileUpdateCmdExe: " + cmd);
+        System.out.println("UserProfileUpdateCmdExe: " + userProfile);
         if (cmd.getAvatarFile() != null) {
             userProfileGateway.updateAvatar(userProfile.getUserId(), cmd.getAvatarFile());
-            userProfile.setAvatar(minioConfig.getPublicUrl(userProfile.getUserId().toString()));
+            userProfile.setAvatar(minioConfig.getPublicUrl(userProfile.getUserId()));
         }
         userProfileGateway.updateUserProfile(userProfile);
         return Response.buildSuccess();

@@ -68,7 +68,9 @@ public class JwtTokenProvider implements InitializingBean {
         } else {
             expiration = new Date(now + this.tokenValidityInMilliseconds);
         }
-        JWSHeader header = new JWSHeader(JWSAlgorithm.RS256);
+        JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256)
+                .type(JOSEObjectType.JWT)
+                .build();
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(subject)
                 .issuer("any3d")

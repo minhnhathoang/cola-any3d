@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nhathm.common.SpringSecurityUtils;
 import org.nhathm.config.MinioConfig;
-import org.nhathm.domain.objectstorage.entity.MetadataKey;
-import org.nhathm.domain.objectstorage.gateway.ObjectStorageGateway;
+import org.nhathm.objectstorage.MetadataKey;
 import org.nhathm.dto.clientobject.ContentCreatePresignedUploadUrlCO;
 import org.nhathm.dto.command.ContentCreatePresignedUrlUploadHologramCmd;
+import org.nhathm.objectstorage.ObjectStorageService;
 import org.springframework.stereotype.Component;
 import util.Strings;
 
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Component
 public class ContentCreatePresignedUploadUrlCmdExe {
 
-    private final ObjectStorageGateway objectStorageGateway;
+    private final ObjectStorageService objectStorageService;
 
     public SingleResponse<ContentCreatePresignedUploadUrlCO> execute(ContentCreatePresignedUrlUploadHologramCmd cmd) {
         Map<String, String> requestParams = new HashMap<>();
@@ -32,11 +32,11 @@ public class ContentCreatePresignedUploadUrlCmdExe {
         requestParams.put(MetadataKey.X_AMZ_META_PROJECT_ID, cmd.getProjectId());
         requestParams.put(MetadataKey.X_AMZ_META_FILE_NAME, cmd.getHologramFileName());
 
-        String contentId = UUID.randomUUID().toString();
-        String presignedUrl = objectStorageGateway.getPresignedPutUrl(MinioConfig.COMMON_BUCKET_NAME, contentId, requestParams);
+        String hologramId = UUID.randomUUID().toString();
+        String presignedUrl = objectStorageService.getPresignedPutUrl(MinioConfig.COMMON_BUCKET_NAME, hologramId, requestParams);
 
         ContentCreatePresignedUploadUrlCO data = new ContentCreatePresignedUploadUrlCO();
-        data.setContentId(contentId);
+        data.setHologramId(hologramId);
         data.setPresignedUrl(presignedUrl);
         return SingleResponse.of(data);
     }

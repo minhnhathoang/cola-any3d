@@ -1,13 +1,16 @@
 package org.nhathm.domain.project.gateway;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.yulichang.base.MPJBaseServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.nhathm.domain.project.database.ProjectConvertor;
 import org.nhathm.domain.project.database.ProjectMapper;
 import org.nhathm.domain.project.dataobject.ProjectDO;
 import org.nhathm.domain.project.entity.Project;
-import org.nhathm.dto.domainevent.ProjectCreatedEvent;
-import org.nhathm.event.DomainEventPublisher;
+import org.nhathm.dto.domainevent.ProjectAddedEvent;
+import org.nhathm.dto.domainevent.ProjectDeletedEvent;
+import org.nhathm.dto.domainevent.ProjectUpdatedEvent;
+import org.nhathm.event.EventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,19 +19,13 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
+@Log4j2
 public class ProjectGatewayImpl
-        extends ServiceImpl<ProjectMapper, ProjectDO> implements ProjectGateway {
+        extends MPJBaseServiceImpl<ProjectMapper, ProjectDO> implements ProjectGateway {
 
     private final ProjectConvertor projectConvertor;
 
-    private final DomainEventPublisher domainEventPublisher;
-
-    @Override
-    public boolean isExistsById(String id) {
-        return this.lambdaQuery()
-                .eq(ProjectDO::getId, id)
-                .count() > 0;
-    }
+    private final EventPublisher eventPublisher;
 
     @Override
     public void createProject(Project project) {
@@ -36,29 +33,41 @@ public class ProjectGatewayImpl
         this.save(projectDO);
 
         // publish event
-        ProjectCreatedEvent event = new ProjectCreatedEvent();
+        ProjectAddedEvent event = new ProjectAddedEvent();
         event.setProjectId(projectDO.getId());
-        domainEventPublisher.publishProjectEvent(event);
+        eventPublisher.publish(event);
     }
 
     @Override
     public void update(Project project) {
-//        projectRepository.save(projectConvertor.toDataObject(project));
+        ProjectDO projectDO = projectConvertor.toDataObject(project);
+        this.baseMapper.updateById(projectDO);
+
+        // publish event
+        ProjectUpdatedEvent event = new ProjectUpdatedEvent();
+        event.setProjectId(projectDO.getId());
+        eventPublisher.publish(event);
     }
 
     @Override
-    public void delete(String id) {
-        this.baseMapper.deleteById(id);
+    public void delete(String id, String userId) {
+        ProjectDO projectDO = this.baseMapper.getById(id);
+        this.removeById(id);
+
+        // publish event
+        ProjectDeletedEvent event = new ProjectDeletedEvent();
+        event.setId(id);
+        event.setName(projectDO.getName());
+        event.setDeletedBy(userId);
+        eventPublisher.publish(event);
     }
 
     @Override
     public List<Project> getProjectListByOwnerId(String ownerId) {
-        List<ProjectDO> projectDOList = this.lambdaQuery()
-                .eq(ProjectDO::getOwnerId, ownerId)
-                .list();
         List<Project> projectList = new ArrayList<>();
+        List<ProjectDO> projectDOList = this.baseMapper.selectByOwnerId(ownerId);
         for (ProjectDO projectDO : projectDOList) {
-            projectList.add(projectConvertor.lazyFetchToEntity(projectDO));
+            projectList.add(projectConvertor.toEntity(projectDO));
         }
         return projectList;
     }
@@ -66,6 +75,7 @@ public class ProjectGatewayImpl
     @Override
     public Project getById(String id) {
         ProjectDO projectDO = this.baseMapper.getById(id);
-        return projectConvertor.lazyFetchToEntity(projectDO);
+        log.info("projectDO: {}", projectDO);
+        return projectConvertor.toEntity(projectDO);
     }
 }

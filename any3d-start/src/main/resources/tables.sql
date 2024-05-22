@@ -7,21 +7,24 @@ CREATE TABLE user
     created_at       timestamp   DEFAULT current_timestamp(),
     last_modified_at timestamp   DEFAULT NULL,
 
-    CONSTRAINT PRIMARY KEY (id),
-    UNIQUE KEY users_AK1 (username),
-    UNIQUE KEY users_AK2 (email)
+    CONSTRAINT PRIMARY KEY PK_user (id),
+    UNIQUE KEY AK1_user (username),
+    UNIQUE KEY AK2_user (email)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+
 CREATE TABLE user_profile
 (
+    id      varchar(36) NOT NULL,
     user_id varchar(36) NOT NULL,
     name    varchar(70)  DEFAULT NULL,
     avatar  varchar(100) DEFAULT NULL,
     address varchar(100) DEFAULT NULL,
     phone   varchar(20)  DEFAULT NULL,
 
-    CONSTRAINT user_profile_FK FOREIGN KEY (user_id) REFERENCES user (id)
+    UNIQUE KEY AK1_user_profile (user_id),
+    CONSTRAINT FK1_user_profile_user FOREIGN KEY (user_id) REFERENCES user (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
@@ -35,37 +38,43 @@ CREATE TABLE project
     metadata         json      DEFAULT NULL,
     created_at       timestamp DEFAULT current_timestamp(),
     last_modified_at timestamp DEFAULT NULL,
+    deleted          tinyint(1) NOT NULL DEFAULT 0,
 
     PRIMARY KEY (id),
-    CONSTRAINT project_FK FOREIGN KEY (owner_id) REFERENCES user (id)
+    CONSTRAINT FK1_project_user FOREIGN KEY (owner_id) REFERENCES user (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
 
 CREATE TABLE content
 (
     id               varchar(36) NOT NULL,
     project_id       varchar(36) NOT NULL,
+    name             varchar(70) NOT NULL,
     metadata         json      DEFAULT NULL,
     created_at       timestamp DEFAULT current_timestamp(),
     last_modified_at timestamp DEFAULT NULL,
+    deleted          tinyint(1) NOT NULL DEFAULT 0,
 
     PRIMARY KEY (id),
-    CONSTRAINT content_FK1 FOREIGN KEY (project_id) REFERENCES project (id)
+    CONSTRAINT FK1_content_project FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
 
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
 
 CREATE TABLE hologram
 (
     id              varchar(36) NOT NULL,
     content_id      varchar(36) NOT NULL,
     filename        varchar(70) NOT NULL,
-    additional_data json DEFAULT NULL,
 
     PRIMARY KEY (id),
-    CONSTRAINT hologram_FK FOREIGN KEY (content_id) REFERENCES content (id)
+    CONSTRAINT FK1_hologram_content FOREIGN KEY (content_id) REFERENCES content (id) ON DELETE CASCADE,
+    UNIQUE KEY AK1_hologram (content_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
 
 CREATE TABLE image_target
 (
@@ -76,72 +85,20 @@ CREATE TABLE image_target
     additional_data json DEFAULT NULL,
 
     PRIMARY KEY (id),
-    CONSTRAINT image_target_FK FOREIGN KEY (content_id) REFERENCES content (id)
+    CONSTRAINT FK1_image_target_content FOREIGN KEY (content_id) REFERENCES content (id) ON DELETE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+
 CREATE TABLE vuforia_key
 (
+    id         varchar(36)  NOT NULL,
     project_id varchar(36)  NOT NULL,
     access_key varchar(100) NOT NULL,
     secret_key varchar(100) NOT NULL,
 
-    PRIMARY KEY (project_id),
-    CONSTRAINT vuforia_key_FK FOREIGN KEY (project_id) REFERENCES project (id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
-
-###ACL tables
-CREATE TABLE acl_sid
-(
-    id        bigint unsigned NOT NULL AUTO_INCREMENT,
-    principal tinyint(1)      NOT NULL,
-    sid       varchar(100)    NOT NULL,
-
     PRIMARY KEY (id),
-    UNIQUE KEY acl_sid_UK1 (sid, principal)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
-CREATE TABLE acl_class
-(
-    id   bigint unsigned NOT NULL AUTO_INCREMENT,
-    name varchar(100)    NOT NULL,
-
-    PRIMARY KEY (id),
-    UNIQUE KEY acl_class_UK1 (name)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
-CREATE TABLE acl_object_identity
-(
-    id                 bigint signed NOT NULL AUTO_INCREMENT,
-    object_id_class    bigint(20)    NOT NULL,
-    object_id_identity bigint(20)    NOT NULL,
-    owner_sid          bigint(20) DEFAULT NULL,
-    entries_inheriting tinyint(1) DEFAULT NULL,
-
-    PRIMARY KEY (id),
-    UNIQUE KEY acl_object_identity_UK1 (object_id_class, object_id_identity),
-    CONSTRAINT acl_object_identity_FK1 FOREIGN KEY (object_id_class) REFERENCES acl_class (id),
-    CONSTRAINT acl_object_identity_FK2 FOREIGN KEY (owner_sid) REFERENCES acl_sid (id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
-CREATE TABLE acl_entry
-(
-    id                  bigint(20) NOT NULL,
-    acl_object_identity bigint(20) NOT NULL,
-    ace_order           int(11)    NOT NULL,
-    sid                 bigint(20) NOT NULL,
-    mask                int(11)    NOT NULL,
-    granting            tinyint(1) NOT NULL,
-    audit_success       tinyint(1) NOT NULL,
-    audit_failure       tinyint(1) NOT NULL,
-
-    PRIMARY KEY (id),
-    CONSTRAINT acl_entry_FK1 FOREIGN KEY (acl_object_identity) REFERENCES acl_object_identity (id),
-    CONSTRAINT acl_entry_FK2 FOREIGN KEY (sid) REFERENCES acl_sid (id)
+    CONSTRAINT FK1_vuforia_key_project FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
+    UNIQUE KEY AK1_vuforia_key (project_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

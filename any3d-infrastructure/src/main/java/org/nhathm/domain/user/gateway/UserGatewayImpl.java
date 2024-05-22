@@ -45,6 +45,6 @@ public class UserGatewayImpl
 
     @Override
     public void update(User user) {
-//        userRepository.save(userConvertor.toDataObject(user));
+        this.updateById(userConvertor.toDataObject(user));
     }
 }

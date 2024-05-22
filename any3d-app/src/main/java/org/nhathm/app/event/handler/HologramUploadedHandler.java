@@ -8,8 +8,7 @@ import org.nhathm.domain.content.entity.Content;
 import org.nhathm.domain.content.gateway.ContentGateway;
 import org.nhathm.domain.hologram.entity.Hologram;
 import org.nhathm.domain.hologram.gateway.HologramGateway;
-import org.nhathm.domain.objectstorage.entity.MetadataKey;
-import org.nhathm.dto.domainevent.ContentCreatedEvent;
+import org.nhathm.objectstorage.MetadataKey;
 import org.nhathm.event.EventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -22,8 +21,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class HologramUploadedHandler {
-
-    private final EventPublisher eventPublisher;
 
     private final ContentGateway contentGateway;
 
@@ -41,19 +38,14 @@ public class HologramUploadedHandler {
         String filename = userMetadata.get(MetadataKey.X_AMZ_META_FILE_NAME);
 
         Content content = DomainFactory.create(Content.class);
-        String contentId = event.objectName();
-        content.setId(contentId);
         content.setProjectId(projectId);
+        content.setName(filename);
         contentGateway.addContent(content);
 
         Hologram hologram = DomainFactory.create(Hologram.class);
-        hologram.setContentId(contentId);
+        hologram.setId(event.objectName());
+        hologram.setContentId(content.getId());
         hologram.setFilename(filename);
         hologramGateway.addHologram(hologram);
-
-        // publish ContentCreatedEvent
-        ContentCreatedEvent contentCreatedEvent = new ContentCreatedEvent();
-        contentCreatedEvent.setContentId(contentId);
-        eventPublisher.publish(contentCreatedEvent);
     }
 }

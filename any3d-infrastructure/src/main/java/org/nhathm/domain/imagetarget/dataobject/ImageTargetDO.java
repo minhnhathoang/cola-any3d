@@ -1,33 +1,32 @@
 package org.nhathm.domain.imagetarget.dataobject;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.nhathm.domain.arsdk.ArSdkType;
+import org.nhathm.domain.content.entity.Content;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Getter
 @Setter
-@TableName("image_target")
-public class ImageTargetDO implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
+@TableName(value = "image_target", autoResultMap = true)
+public class ImageTargetDO {
 
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
+    @TableField
     private String contentId;
 
+    @TableField
     private String filename;
 
     @EnumValue
+    @TableField
     private ArSdkType arSdkType;
 
+    @TableField
     private String additionalData;
 }

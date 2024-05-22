@@ -21,7 +21,7 @@ public class JsonUtils {
         if (mObjectMapper == null) {
             mObjectMapper = new ObjectMapper();
             mObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+            mObjectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
         }
         return mObjectMapper;
     }
@@ -36,7 +36,11 @@ public class JsonUtils {
         return getMapper().readValue(json, type);
     }
 
-    public static String toJson(Object object) throws IOException {
-        return getMapper().writeValueAsString(object);
+    public static String toJson(Object object) {
+        try {
+            return getMapper().writeValueAsString(object);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

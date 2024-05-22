@@ -1,9 +1,13 @@
 package org.nhathm.domain.userprofile.dataobject;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.nhathm.domain.user.dataobject.UserDO;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -16,22 +20,25 @@ import java.io.Serializable;
  * @author nhathm
  * @since 2024-04-06
  */
-@Getter
-@Setter
-@TableName("user_profile")
-public class UserProfileDO implements Serializable {
+@Data
+@TableName(value = "user_profile", autoResultMap = true)
+public class UserProfileDO {
 
-    @Serial
-    private static final long serialVersionUID = -381841047201887255L;
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
+    private String id;
 
-    @TableId
+    @TableField
     private String userId;
 
+    @TableField
     private String name;
 
+    @TableField
     private String avatar;
 
+    @TableField
     private String address;
 
+    @TableField
     private String phone;
 }

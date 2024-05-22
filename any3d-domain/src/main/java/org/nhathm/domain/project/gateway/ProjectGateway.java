@@ -7,13 +7,14 @@ import java.util.List;
 
 public interface ProjectGateway {
 
-    boolean isExistsById(String id);
-
     void createProject(Project project);
 
     void update(Project project);
 
-    void delete(String id);
+    /*
+     * deleted by userId
+     */
+    void delete(String id, String userId);
 
     List<Project> getProjectListByOwnerId(String ownerId);
 

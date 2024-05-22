@@ -9,4 +9,6 @@ import lombok.Data;
 public class ContentCreatedEvent extends BaseEvent {
 
     private String contentId;
+
+    private String projectId;
 }

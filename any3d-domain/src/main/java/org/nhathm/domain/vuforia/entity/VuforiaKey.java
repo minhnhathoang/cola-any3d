@@ -7,6 +7,8 @@ import lombok.Data;
 @Entity
 public class VuforiaKey {
 
+    private String id;
+
     private String projectId;
 
     private String accessKey;

@@ -7,6 +7,7 @@ import domain.security.common.JwtConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.nhathm.common.SpringSecurityUtils;
 import org.nhathm.domain.auth.domainservice.JwtProperties;
 import org.nhathm.domain.auth.domainservice.JwtTokenProvider;
 import org.nhathm.domain.auth.domainservice.UnauthorizedException;
@@ -80,8 +81,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
                             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                            //
-                            accessor.setUser(authentication);
+                            AdviceWebsocketPrincipal principal = new AdviceWebsocketPrincipal(SpringSecurityUtils.getUserId());
+                            accessor.setUser(principal);
                         } catch (ParseException e) {
                             throw new SysException("Failed to parse token", e);
                         }

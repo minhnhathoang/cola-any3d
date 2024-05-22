@@ -96,6 +96,12 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.github.yulichang</groupId>
+                <artifactId>mybatis-plus-join-boot-starter</artifactId>
+                <version>1.4.11</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-extension -->
             <dependency>
                 <groupId>com.baomidou</groupId>
